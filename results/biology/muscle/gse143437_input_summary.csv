@@ -1,0 +1,81 @@
+injury,time_days,sample_id,cell_type,n_cells
+Day 0,0.0,D0_A,B/T/NK cells,24
+Day 0,0.0,D0_A,Endothelial,1088
+Day 0,0.0,D0_A,FAPs,468
+Day 0,0.0,D0_A,Mature skeletal muscle,180
+Day 0,0.0,D0_A,MuSCs and progenitors,54
+Day 0,0.0,D0_A,Neural/Glial/Schwann cells,96
+Day 0,0.0,D0_A,Resident Macrophages/APCs,35
+Day 0,0.0,D0_A,Smooth muscle cells,174
+Day 0,0.0,D0_A,Tenocytes,20
+Day 0,0.0,D0_B,B/T/NK cells,26
+Day 0,0.0,D0_B,Endothelial,1229
+Day 0,0.0,D0_B,FAPs,1287
+Day 0,0.0,D0_B,Mature skeletal muscle,305
+Day 0,0.0,D0_B,MuSCs and progenitors,49
+Day 0,0.0,D0_B,Neural/Glial/Schwann cells,129
+Day 0,0.0,D0_B,Resident Macrophages/APCs,84
+Day 0,0.0,D0_B,Smooth muscle cells,203
+Day 0,0.0,D0_B,Tenocytes,128
+Day 0,0.0,D0_Cv3,Endothelial,361
+Day 0,0.0,D0_Cv3,FAPs,670
+Day 0,0.0,D0_Cv3,Mature skeletal muscle,81
+Day 0,0.0,D0_Cv3,MuSCs and progenitors,53
+Day 0,0.0,D0_Cv3,Neural/Glial/Schwann cells,41
+Day 0,0.0,D0_Cv3,Resident Macrophages/APCs,45
+Day 0,0.0,D0_Cv3,Smooth muscle cells,132
+Day 0,0.0,D0_Cv3,Tenocytes,66
+Day 2,2.0,D2_C,Endothelial,230
+Day 2,2.0,D2_C,FAPs,417
+Day 2,2.0,D2_C,Monocytes/Macrophages/Platelets,1937
+Day 2,2.0,D2_C,Pro-inflammatory macrophages,667
+Day 2,2.0,D2_C,Resident Macrophages/APCs,403
+Day 2,2.0,D2_D,Endothelial,87
+Day 2,2.0,D2_D,FAPs,166
+Day 2,2.0,D2_D,Monocytes/Macrophages/Platelets,812
+Day 2,2.0,D2_D,Pro-inflammatory macrophages,648
+Day 2,2.0,D2_D,Resident Macrophages/APCs,157
+Day 5,5.0,D5_A,Anti-inflammatory macrophages,1528
+Day 5,5.0,D5_A,B/T/NK cells,128
+Day 5,5.0,D5_A,Endothelial,112
+Day 5,5.0,D5_A,FAPs,692
+Day 5,5.0,D5_A,Mature skeletal muscle,50
+Day 5,5.0,D5_A,Monocytes/Macrophages/Platelets,948
+Day 5,5.0,D5_A,MuSCs and progenitors,404
+Day 5,5.0,D5_A,Resident Macrophages/APCs,284
+Day 5,5.0,D5_B,Anti-inflammatory macrophages,1597
+Day 5,5.0,D5_B,B/T/NK cells,231
+Day 5,5.0,D5_B,Endothelial,239
+Day 5,5.0,D5_B,FAPs,724
+Day 5,5.0,D5_B,Mature skeletal muscle,61
+Day 5,5.0,D5_B,Monocytes/Macrophages/Platelets,977
+Day 5,5.0,D5_B,MuSCs and progenitors,488
+Day 5,5.0,D5_B,Resident Macrophages/APCs,348
+Day 5,5.0,D5_C,Anti-inflammatory macrophages,1714
+Day 5,5.0,D5_C,B/T/NK cells,91
+Day 5,5.0,D5_C,Endothelial,198
+Day 5,5.0,D5_C,FAPs,1175
+Day 5,5.0,D5_C,Mature skeletal muscle,65
+Day 5,5.0,D5_C,Monocytes/Macrophages/Platelets,1249
+Day 5,5.0,D5_C,MuSCs and progenitors,749
+Day 5,5.0,D5_C,Resident Macrophages/APCs,188
+Day 7,7.0,D7_C,Anti-inflammatory macrophages,86
+Day 7,7.0,D7_C,B/T/NK cells,50
+Day 7,7.0,D7_C,Endothelial,1051
+Day 7,7.0,D7_C,FAPs,1959
+Day 7,7.0,D7_C,Mature skeletal muscle,113
+Day 7,7.0,D7_C,MuSCs and progenitors,279
+Day 7,7.0,D7_C,Neural/Glial/Schwann cells,119
+Day 7,7.0,D7_C,Resident Macrophages/APCs,115
+Day 7,7.0,D7_C,Smooth muscle cells,301
+Day 7,7.0,D7_C,Tenocytes,230
+Day 7,7.0,D7_D,Anti-inflammatory macrophages,706
+Day 7,7.0,D7_D,B/T/NK cells,97
+Day 7,7.0,D7_D,Endothelial,302
+Day 7,7.0,D7_D,FAPs,1202
+Day 7,7.0,D7_D,Mature skeletal muscle,46
+Day 7,7.0,D7_D,MuSCs and progenitors,507
+Day 7,7.0,D7_D,Neural/Glial/Schwann cells,29
+Day 7,7.0,D7_D,Resident Macrophages/APCs,189
+Day 7,7.0,D7_D,Smooth muscle cells,86
+Day 7,7.0,D7_D,Tenocytes,179

@@ -1,0 +1,9 @@
+dataset,algorithm,reference,lineage_cluster_source,n_aligned,ARI,NMI,Jaccard,is_duplicate
+simulated_branch,slingshot,true_branch,,1357,0.142301833004634,0.111099817861446,0.523371214526062,FALSE
+simulated_branch,LineaLinkR,true_branch,kmeans:pca:algorithm=Lloyd:requested_k=15:occupied_k=15:purpose=lineage_topology,1357,0.200659654731809,0.299673493079165,0.551895483069071,FALSE
+sim_2br_500c,slingshot,true_branch,,366,0.278221044353052,0.378108642938138,0.615128712871287,FALSE
+sim_2br_500c,LineaLinkR,true_branch,kmeans:pca:algorithm=Lloyd:requested_k=15:occupied_k=15:purpose=lineage_topology,366,1,1.00000000041103,1,FALSE
+sim_2br_2000c,slingshot,true_branch,,1470,0,3.19150229415355e-10,0.5,FALSE
+sim_2br_2000c,LineaLinkR,true_branch,kmeans:pca:algorithm=Lloyd:requested_k=15:occupied_k=15:purpose=lineage_topology,1470,1,1.00000000040931,1,FALSE
+sim_2br_5000c,slingshot,true_branch,,3684,0,3.18515687442728e-10,0.5,FALSE
+sim_2br_5000c,LineaLinkR,true_branch,kmeans:pca:algorithm=Lloyd:requested_k=15:occupied_k=15:purpose=lineage_topology,3684,1,1.00000000040831,1,FALSE

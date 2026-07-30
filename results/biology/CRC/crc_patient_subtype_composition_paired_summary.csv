@@ -1,0 +1,3 @@
+metric,n_paired_patients,normal_median,tumor_median,mean_paired_difference,bootstrap_ci95_lo,bootstrap_ci95_hi,paired_wilcoxon_p,n_tumor_greater,n_tumor_lower,inference_unit
+myofibroblast_fraction_of_stromal,10,0.002001415539477823,0.37889908256880733,0.40357886686255523,0.28664485734931894,0.5342419986631218,0.001953125,10,0,patient
+SPP1_positive_fraction_of_myeloid,10,0.4360018091361375,0.4962995736465288,0.13264151707145203,-0.010757897762959916,0.2909421911886721,0.275390625,6,4,patient

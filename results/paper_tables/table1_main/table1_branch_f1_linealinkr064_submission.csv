@@ -1,0 +1,9 @@
+dataset,algorithm,lineage_cluster_source,n_aligned,Branch_F1,Branch_F1_many_to_one_legacy
+simulated_branch,slingshot,,1357,0.686527538745177,0.686527538745177
+simulated_branch,LineaLinkR,kmeans:pca:algorithm=Lloyd:requested_k=15:occupied_k=15:purpose=lineage_topology,1357,0.474148469887204,0.711222704830805
+sim_2br_500c,slingshot,,366,0.76091513991432,0.76091513991432
+sim_2br_500c,LineaLinkR,kmeans:pca:algorithm=Lloyd:requested_k=15:occupied_k=15:purpose=lineage_topology,366,1,1
+sim_2br_2000c,slingshot,,1470,0.404858299595142,0.647126340832255
+sim_2br_2000c,LineaLinkR,kmeans:pca:algorithm=Lloyd:requested_k=15:occupied_k=15:purpose=lineage_topology,1470,1,1
+sim_2br_5000c,slingshot,,3684,0.404269081500647,0.647490116833432
+sim_2br_5000c,LineaLinkR,kmeans:pca:algorithm=Lloyd:requested_k=15:occupied_k=15:purpose=lineage_topology,3684,1,1

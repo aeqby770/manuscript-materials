@@ -1,0 +1,4 @@
+dataset,evidence_axis,context,effect,p_value,adjusted_p,inference_unit,evidence_scope
+GSE143437,recorded injury-day C3-C3ar1 expression score,FAPs to resident macrophages/APCs,,0.0967290843168882,,biological sample,recorded injury-day expression score
+GSE291091,whole-population FAP depletion,FAP compartment,-0.640390875388548,0.136109110486884,0.484290839516391,sample pseudobulk,whole-population FAP-depletion perturbation contrast
+GSE291091,whole-population FAP depletion,Mononuclear phagocytes,-0.530963483139603,0.0139285637513299,0.0737865778659726,sample pseudobulk,whole-population FAP-depletion perturbation contrast

@@ -1,0 +1,5 @@
+candidate,potency_mode,root_representation,anchor_cell,blind_score,ordering_score,potency_spearman,finite_fraction,component_score,tie_rank,terminal_root_cluster,terminal_anchor_cluster,terminal_leaf_clusters,terminal_anchor_is_high_end,terminal_anchor_is_leaf,terminal_leaf_eligible,selector_topology_k
+detected_genes_high_state,detected_genes_high,state_aggregate,12430,-0.143760463184759,0.55013580868274,0.000807679475762818,1,0.744061708973313,1,6,6,7;10;11;13;14;15,FALSE,FALSE,FALSE,15
+detected_genes_high_cellwise,detected_genes_high,cellwise_component,17880,0.277759133291191,0.529881335019931,-0.126387357621787,1,0.851695369689942,2,15,6,6;7;10;11;13;14,TRUE,TRUE,TRUE,15
+detected_genes_low_state,detected_genes_low,state_aggregate,2256,0.289703393173998,0.513984011856555,-0.17999943413294,1,0.520629960440531,3,7,7,6;10;11;13;14;15,FALSE,FALSE,FALSE,15
+detected_genes_low_cellwise,detected_genes_low,cellwise_component,16712,0.134110240294753,0.516363191183869,-0.00741243336519481,1,0.758242651252818,4,7,7,6;10;11;13;14;15,FALSE,FALSE,FALSE,15

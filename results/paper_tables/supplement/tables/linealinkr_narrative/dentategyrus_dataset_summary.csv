@@ -1,0 +1,2 @@
+dataset,benchmark_protocol,result_revision,n_cells,n_genes,n_types,n_lineages,n_lr_pairs,n_temporal_rows,n_temporal_pairs,mean_temporal_score,max_temporal_score
+dentategyrus,linealinkr064_submission,linealinkr064_terminal_leaf_endpoint,2930,13913,14,5,6200,247860,292,0.53431534326652,0.945899069309235

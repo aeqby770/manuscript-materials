@@ -1,0 +1,7 @@
+pair_name,pair_key,datasets_supported,datasets,family,mean_temporal_score
+Pyy_Npy1r,pyy___npy1r,1,pancreas,other,0.670028523802757
+Mif_Ackr3,mif___ackr3,1,dentategyrus,Chemokine,0.636443093016341
+Ccl3_Ccr1,ccl3___ccr1,1,dentategyrus,Chemokine,0.613760769367218
+Mdk_Lrp1,mdk___lrp1,1,pancreas,MDK-axis,0.605146600441499
+Col1a1_Sdc4,col1a1___sdc4,1,pancreas,MDK-axis,0.599428335825602
+Dlk1_Notch4,dlk1___notch4,1,pancreas,Notch,0.579434224444887

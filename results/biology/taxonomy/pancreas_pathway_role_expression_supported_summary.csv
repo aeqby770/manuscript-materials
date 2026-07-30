@@ -1,0 +1,4 @@
+pathway,n_trajectories,n_matching_coarse_prior,coarse_prior_agreement,median_expected_role_weight,median_expected_role_margin,calibration_unit
+FGF,441,19,0.04308390022675737,0.14134106412529962,-0.643953695893287,expression_supported_trajectory
+Notch,549,7,0.012750455373406194,0.0,-0.745336413383484,expression_supported_trajectory
+Wnt,257,31,0.12062256809338522,0.112610168755054,-0.660389959812164,expression_supported_trajectory

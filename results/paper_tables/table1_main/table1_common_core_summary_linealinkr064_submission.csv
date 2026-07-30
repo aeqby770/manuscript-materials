@@ -1,0 +1,13 @@
+algorithm,root_input_mode,direction_policy,n_common,mean_spearman,median_spearman,mean_rank
+TSCAN,root_free_longest_path,gt_aligned_if_negative,19,0.743168587050883,0.846080685020171,3.52631578947368
+MultistageOT,time_or_embedding_anchors,signed,19,0.699912151275571,0.795964627690163,3
+LineaLinkR,blind_data_driven,signed,19,0.615187432916052,0.835779426482647,4.73684210526316
+scTour,internal_latent_time,signed,19,0.523999107617733,0.797754496442586,5.31578947368421
+scFates,internal_graph_root,signed,19,0.504440594466742,0.773376217253789,5.57894736842105
+monocle3,cluster_label_or_timepoint_heuristic,signed,19,0.503511935249115,0.598562521449399,6.89473684210526
+SCORPIUS,root_free_native,gt_aligned_if_negative,19,0.45599990398675,0.455625685483073,7
+slingshot,root_free_native,gt_aligned_if_negative,19,0.437829797393409,0.452136039135976,7.26315789473684
+Palantir,cluster_label_heuristic,signed,19,0.388138431809203,0.43023295029062,7.05263157894737
+pCreode,arbitrary_graph_node,gt_aligned_if_negative,19,0.332008823200643,0.283168532340473,8.52631578947369
+DPT,cluster_label_heuristic,signed,19,0.142169025856344,0.251648206592826,9.21052631578947
+StaVia,cluster_label_heuristic,signed,19,0.097779409351314,0.176518541901127,9.89473684210526

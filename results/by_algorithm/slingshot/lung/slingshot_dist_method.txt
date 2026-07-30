@@ -1,0 +1,4 @@
+dist.method=slingshot
+n_lineages=1
+n_clusters=5
+pseudotime_collapse=curve_weighted_mean

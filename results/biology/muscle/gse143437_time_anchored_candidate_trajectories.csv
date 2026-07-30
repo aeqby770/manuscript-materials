@@ -1,0 +1,401 @@
+pair_idx,source,target,lineage,bin,score,n_eff_cells,weight_mass_cells,lineage_entropy,structural_valid,expression_supported,source_label,target_label,phase_day,ligand_genes,receptor_genes,valid_score
+61,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Fgf7,Fgfr1,
+61,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Fgf7,Fgfr1,
+61,4,1,1,3,0,2591,2591,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,5,Fgf7,Fgfr1,
+61,4,1,1,4,0.553567886352539,792,792,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,7,Fgf7,Fgfr1,0.553567886352539
+61,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Fgf7,Fgfr1,
+61,4,6,1,2,0,583,583,0,TRUE,FALSE,FAPs,Monocytes/Macrophages/Platelets,2,Fgf7,Fgfr1,
+61,4,6,1,3,0,2591,2591,0,TRUE,FALSE,FAPs,Monocytes/Macrophages/Platelets,5,Fgf7,Fgfr1,
+61,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Fgf7,Fgfr1,
+61,4,7,1,1,0.776990234851837,156,156,0,TRUE,TRUE,FAPs,MuSCs and progenitors,0,Fgf7,Fgfr1,0.776990234851837
+61,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Fgf7,Fgfr1,
+61,4,7,1,3,0.663381338119507,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Fgf7,Fgfr1,0.663381338119507
+61,4,7,1,4,0.76017701625824,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Fgf7,Fgfr1,0.76017701625824
+61,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Fgf7,Fgfr1,
+61,4,9,1,2,0,583,583,0,TRUE,FALSE,FAPs,Pro-inflammatory macrophages,2,Fgf7,Fgfr1,
+61,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Fgf7,Fgfr1,
+61,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Fgf7,Fgfr1,
+61,4,10,1,1,0.710378527641296,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Fgf7,Fgfr1,0.710378527641296
+61,4,10,1,2,0.632115542888641,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Fgf7,Fgfr1,0.632115542888641
+61,4,10,1,3,0.512383222579956,820,820,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,5,Fgf7,Fgfr1,0.512383222579956
+61,4,10,1,4,0.669954121112824,304,304,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,7,Fgf7,Fgfr1,0.669954121112824
+62,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Fgf7,Fgfr2,
+62,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Fgf7,Fgfr2,
+62,4,1,1,3,0,2591,2591,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,5,Fgf7,Fgfr2,
+62,4,1,1,4,0,792,792,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,7,Fgf7,Fgfr2,
+62,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Fgf7,Fgfr2,
+62,4,6,1,2,0,583,583,0,TRUE,FALSE,FAPs,Monocytes/Macrophages/Platelets,2,Fgf7,Fgfr2,
+62,4,6,1,3,0,2591,2591,0,TRUE,FALSE,FAPs,Monocytes/Macrophages/Platelets,5,Fgf7,Fgfr2,
+62,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Fgf7,Fgfr2,
+62,4,7,1,1,0,156,156,0,TRUE,FALSE,FAPs,MuSCs and progenitors,0,Fgf7,Fgfr2,
+62,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Fgf7,Fgfr2,
+62,4,7,1,3,0,1641,1641,0,TRUE,FALSE,FAPs,MuSCs and progenitors,5,Fgf7,Fgfr2,
+62,4,7,1,4,0,786,786,0,TRUE,FALSE,FAPs,MuSCs and progenitors,7,Fgf7,Fgfr2,
+62,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Fgf7,Fgfr2,
+62,4,9,1,2,0,583,583,0,TRUE,FALSE,FAPs,Pro-inflammatory macrophages,2,Fgf7,Fgfr2,
+62,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Fgf7,Fgfr2,
+62,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Fgf7,Fgfr2,
+62,4,10,1,1,0,164,164,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,0,Fgf7,Fgfr2,
+62,4,10,1,2,0,560,560,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,2,Fgf7,Fgfr2,
+62,4,10,1,3,0,820,820,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,5,Fgf7,Fgfr2,
+62,4,10,1,4,0,304,304,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,7,Fgf7,Fgfr2,
+104,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Vegfa,Flt1,
+104,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Vegfa,Flt1,
+104,4,1,1,3,0,2591,2591,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,5,Vegfa,Flt1,
+104,4,1,1,4,0,792,792,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,7,Vegfa,Flt1,
+104,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Vegfa,Flt1,
+104,4,6,1,2,0,583,583,0,TRUE,FALSE,FAPs,Monocytes/Macrophages/Platelets,2,Vegfa,Flt1,
+104,4,6,1,3,0,2591,2591,0,TRUE,FALSE,FAPs,Monocytes/Macrophages/Platelets,5,Vegfa,Flt1,
+104,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Vegfa,Flt1,
+104,4,7,1,1,0.569735527038574,156,156,0,TRUE,TRUE,FAPs,MuSCs and progenitors,0,Vegfa,Flt1,0.569735527038574
+104,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Vegfa,Flt1,
+104,4,7,1,3,0,1641,1641,0,TRUE,FALSE,FAPs,MuSCs and progenitors,5,Vegfa,Flt1,
+104,4,7,1,4,0,786,786,0,TRUE,FALSE,FAPs,MuSCs and progenitors,7,Vegfa,Flt1,
+104,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Vegfa,Flt1,
+104,4,9,1,2,0,583,583,0,TRUE,FALSE,FAPs,Pro-inflammatory macrophages,2,Vegfa,Flt1,
+104,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Vegfa,Flt1,
+104,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Vegfa,Flt1,
+104,4,10,1,1,0.512120366096497,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Vegfa,Flt1,0.512120366096497
+104,4,10,1,2,0,560,560,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,2,Vegfa,Flt1,
+104,4,10,1,3,0,820,820,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,5,Vegfa,Flt1,
+104,4,10,1,4,0,304,304,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,7,Vegfa,Flt1,
+105,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Vegfa,Kdr,
+105,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Vegfa,Kdr,
+105,4,1,1,3,0,2591,2591,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,5,Vegfa,Kdr,
+105,4,1,1,4,0,792,792,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,7,Vegfa,Kdr,
+105,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Vegfa,Kdr,
+105,4,6,1,2,0.303497761487961,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Vegfa,Kdr,0.303497761487961
+105,4,6,1,3,0.231021374464035,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Vegfa,Kdr,0.231021374464035
+105,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Vegfa,Kdr,
+105,4,7,1,1,0.540215253829956,156,156,0,TRUE,TRUE,FAPs,MuSCs and progenitors,0,Vegfa,Kdr,0.540215253829956
+105,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Vegfa,Kdr,
+105,4,7,1,3,0,1641,1641,0,TRUE,FALSE,FAPs,MuSCs and progenitors,5,Vegfa,Kdr,
+105,4,7,1,4,0,786,786,0,TRUE,FALSE,FAPs,MuSCs and progenitors,7,Vegfa,Kdr,
+105,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Vegfa,Kdr,
+105,4,9,1,2,0,583,583,0,TRUE,FALSE,FAPs,Pro-inflammatory macrophages,2,Vegfa,Kdr,
+105,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Vegfa,Kdr,
+105,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Vegfa,Kdr,
+105,4,10,1,1,0.490856051445007,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Vegfa,Kdr,0.490856051445007
+105,4,10,1,2,0,560,560,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,2,Vegfa,Kdr,
+105,4,10,1,3,0.262470066547394,820,820,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,5,Vegfa,Kdr,0.262470066547394
+105,4,10,1,4,0.425020754337311,304,304,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,7,Vegfa,Kdr,0.425020754337311
+200,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Csf1,Csf1r,
+200,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Csf1,Csf1r,
+200,4,1,1,3,0.859390199184418,2591,2591,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,5,Csf1,Csf1r,0.859390199184418
+200,4,1,1,4,0.834432184696198,792,792,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,7,Csf1,Csf1r,0.834432184696198
+200,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Csf1,Csf1r,
+200,4,6,1,2,0.833378911018372,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Csf1,Csf1r,0.833378911018372
+200,4,6,1,3,0.835061967372894,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Csf1,Csf1r,0.835061967372894
+200,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Csf1,Csf1r,
+200,4,7,1,1,0,156,156,0,TRUE,FALSE,FAPs,MuSCs and progenitors,0,Csf1,Csf1r,
+200,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Csf1,Csf1r,
+200,4,7,1,3,0.600973188877106,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Csf1,Csf1r,0.600973188877106
+200,4,7,1,4,0,786,786,0,TRUE,FALSE,FAPs,MuSCs and progenitors,7,Csf1,Csf1r,
+200,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Csf1,Csf1r,
+200,4,9,1,2,0.851946890354157,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Csf1,Csf1r,0.851946890354157
+200,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Csf1,Csf1r,
+200,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Csf1,Csf1r,
+200,4,10,1,1,0.836978435516357,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Csf1,Csf1r,0.836978435516357
+200,4,10,1,2,0.765580713748932,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Csf1,Csf1r,0.765580713748932
+200,4,10,1,3,0.718770384788513,820,820,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,5,Csf1,Csf1r,0.718770384788513
+200,4,10,1,4,0.682475030422211,304,304,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,7,Csf1,Csf1r,0.682475030422211
+269,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,C3,C3ar1,
+269,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,C3,C3ar1,
+269,4,1,1,3,0.882059037685394,2591,2591,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,5,C3,C3ar1,0.882059037685394
+269,4,1,1,4,0.884688913822174,792,792,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,7,C3,C3ar1,0.884688913822174
+269,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,C3,C3ar1,
+269,4,6,1,2,0.855088651180267,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,C3,C3ar1,0.855088651180267
+269,4,6,1,3,0.882582426071167,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,C3,C3ar1,0.882582426071167
+269,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,C3,C3ar1,
+269,4,7,1,1,0,156,156,0,TRUE,FALSE,FAPs,MuSCs and progenitors,0,C3,C3ar1,
+269,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,C3,C3ar1,
+269,4,7,1,3,0.631947100162506,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,C3,C3ar1,0.631947100162506
+269,4,7,1,4,0,786,786,0,TRUE,FALSE,FAPs,MuSCs and progenitors,7,C3,C3ar1,
+269,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,C3,C3ar1,
+269,4,9,1,2,0.824772477149963,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,C3,C3ar1,0.824772477149963
+269,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,C3,C3ar1,
+269,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,C3,C3ar1,
+269,4,10,1,1,0.848794639110565,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,C3,C3ar1,0.848794639110565
+269,4,10,1,2,0.691153705120087,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,C3,C3ar1,0.691153705120087
+269,4,10,1,3,0.703305184841156,820,820,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,5,C3,C3ar1,0.703305184841156
+269,4,10,1,4,0.644578576087952,304,304,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,7,C3,C3ar1,0.644578576087952
+270,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,C3,Cr2,
+270,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,C3,Cr2,
+270,4,1,1,3,0,2591,2591,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,5,C3,Cr2,
+270,4,1,1,4,0,792,792,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,7,C3,Cr2,
+270,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,C3,Cr2,
+270,4,6,1,2,0,583,583,0,TRUE,FALSE,FAPs,Monocytes/Macrophages/Platelets,2,C3,Cr2,
+270,4,6,1,3,0,2591,2591,0,TRUE,FALSE,FAPs,Monocytes/Macrophages/Platelets,5,C3,Cr2,
+270,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,C3,Cr2,
+270,4,7,1,1,0,156,156,0,TRUE,FALSE,FAPs,MuSCs and progenitors,0,C3,Cr2,
+270,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,C3,Cr2,
+270,4,7,1,3,0,1641,1641,0,TRUE,FALSE,FAPs,MuSCs and progenitors,5,C3,Cr2,
+270,4,7,1,4,0,786,786,0,TRUE,FALSE,FAPs,MuSCs and progenitors,7,C3,Cr2,
+270,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,C3,Cr2,
+270,4,9,1,2,0,583,583,0,TRUE,FALSE,FAPs,Pro-inflammatory macrophages,2,C3,Cr2,
+270,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,C3,Cr2,
+270,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,C3,Cr2,
+270,4,10,1,1,0,164,164,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,0,C3,Cr2,
+270,4,10,1,2,0,560,560,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,2,C3,Cr2,
+270,4,10,1,3,0,820,820,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,5,C3,Cr2,
+270,4,10,1,4,0,304,304,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,7,C3,Cr2,
+399,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Fn1,Cd44,
+399,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Fn1,Cd44,
+399,4,1,1,3,0.886363744735718,2591,2591,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,5,Fn1,Cd44,0.886363744735718
+399,4,1,1,4,0.865762412548065,792,792,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,7,Fn1,Cd44,0.865762412548065
+399,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Fn1,Cd44,
+399,4,6,1,2,0.891910791397095,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Fn1,Cd44,0.891910791397095
+399,4,6,1,3,0.899574875831604,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Fn1,Cd44,0.899574875831604
+399,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Fn1,Cd44,
+399,4,7,1,1,0.7447270154953,156,156,0,TRUE,TRUE,FAPs,MuSCs and progenitors,0,Fn1,Cd44,0.7447270154953
+399,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Fn1,Cd44,
+399,4,7,1,3,0.889279186725617,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Fn1,Cd44,0.889279186725617
+399,4,7,1,4,0.805213630199432,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Fn1,Cd44,0.805213630199432
+399,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Fn1,Cd44,
+399,4,9,1,2,0.902468383312225,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Fn1,Cd44,0.902468383312225
+399,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Fn1,Cd44,
+399,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Fn1,Cd44,
+399,4,10,1,1,0.870366454124451,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Fn1,Cd44,0.870366454124451
+399,4,10,1,2,0.883882582187653,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Fn1,Cd44,0.883882582187653
+399,4,10,1,3,0.879445970058441,820,820,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,5,Fn1,Cd44,0.879445970058441
+399,4,10,1,4,0.885351419448853,304,304,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,7,Fn1,Cd44,0.885351419448853
+400,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Col1a1,Cd44,
+400,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Col1a1,Cd44,
+400,4,1,1,3,0.908933043479919,2591,2591,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,5,Col1a1,Cd44,0.908933043479919
+400,4,1,1,4,0.895307660102844,792,792,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,7,Col1a1,Cd44,0.895307660102844
+400,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Col1a1,Cd44,
+400,4,6,1,2,0.909382820129395,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Col1a1,Cd44,0.909382820129395
+400,4,6,1,3,0.919757843017578,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Col1a1,Cd44,0.919757843017578
+400,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Col1a1,Cd44,
+400,4,7,1,1,0.789872646331787,156,156,0,TRUE,TRUE,FAPs,MuSCs and progenitors,0,Col1a1,Cd44,0.789872646331787
+400,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Col1a1,Cd44,
+400,4,7,1,3,0.911327421665192,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Col1a1,Cd44,0.911327421665192
+400,4,7,1,4,0.845710635185242,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Col1a1,Cd44,0.845710635185242
+400,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Col1a1,Cd44,
+400,4,9,1,2,0.918389976024628,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Col1a1,Cd44,0.918389976024628
+400,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Col1a1,Cd44,
+400,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Col1a1,Cd44,
+400,4,10,1,1,0.896383941173554,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Col1a1,Cd44,0.896383941173554
+400,4,10,1,2,0.902510523796082,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Col1a1,Cd44,0.902510523796082
+400,4,10,1,3,0.903239250183105,820,820,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,5,Col1a1,Cd44,0.903239250183105
+400,4,10,1,4,0.911028265953064,304,304,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,7,Col1a1,Cd44,0.911028265953064
+401,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Col1a2,Cd44,
+401,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Col1a2,Cd44,
+401,4,1,1,3,0.907780230045319,2591,2591,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,5,Col1a2,Cd44,0.907780230045319
+401,4,1,1,4,0.896535515785217,792,792,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,7,Col1a2,Cd44,0.896535515785217
+401,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Col1a2,Cd44,
+401,4,6,1,2,0.914419651031494,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Col1a2,Cd44,0.914419651031494
+401,4,6,1,3,0.918729782104492,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Col1a2,Cd44,0.918729782104492
+401,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Col1a2,Cd44,
+401,4,7,1,1,0.803278744220734,156,156,0,TRUE,TRUE,FAPs,MuSCs and progenitors,0,Col1a2,Cd44,0.803278744220734
+401,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Col1a2,Cd44,
+401,4,7,1,3,0.910201907157898,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Col1a2,Cd44,0.910201907157898
+401,4,7,1,4,0.847420930862427,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Col1a2,Cd44,0.847420930862427
+401,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Col1a2,Cd44,
+401,4,9,1,2,0.922968626022339,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Col1a2,Cd44,0.922968626022339
+401,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Col1a2,Cd44,
+401,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Col1a2,Cd44,
+401,4,10,1,1,0.903822064399719,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Col1a2,Cd44,0.903822064399719
+401,4,10,1,2,0.907890677452087,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Col1a2,Cd44,0.907890677452087
+401,4,10,1,3,0.902022063732147,820,820,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,5,Col1a2,Cd44,0.902022063732147
+401,4,10,1,4,0.912089824676514,304,304,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,7,Col1a2,Cd44,0.912089824676514
+429,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Col1a1,Sdc1,
+429,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Col1a1,Sdc1,
+429,4,1,1,3,0,2591,2591,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,5,Col1a1,Sdc1,
+429,4,1,1,4,0,792,792,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,7,Col1a1,Sdc1,
+429,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Col1a1,Sdc1,
+429,4,6,1,2,0.761287808418274,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Col1a1,Sdc1,0.761287808418274
+429,4,6,1,3,0.806943416595459,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Col1a1,Sdc1,0.806943416595459
+429,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Col1a1,Sdc1,
+429,4,7,1,1,0,156,156,0,TRUE,FALSE,FAPs,MuSCs and progenitors,0,Col1a1,Sdc1,
+429,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Col1a1,Sdc1,
+429,4,7,1,3,0.910109639167786,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Col1a1,Sdc1,0.910109639167786
+429,4,7,1,4,0.845170199871063,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Col1a1,Sdc1,0.845170199871063
+429,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Col1a1,Sdc1,
+429,4,9,1,2,0.752017080783844,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Col1a1,Sdc1,0.752017080783844
+429,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Col1a1,Sdc1,
+429,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Col1a1,Sdc1,
+429,4,10,1,1,0.735328912734985,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Col1a1,Sdc1,0.735328912734985
+429,4,10,1,2,0.679882526397705,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Col1a1,Sdc1,0.679882526397705
+429,4,10,1,3,0,820,820,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,5,Col1a1,Sdc1,
+429,4,10,1,4,0,304,304,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,7,Col1a1,Sdc1,
+430,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Col1a2,Sdc1,
+430,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Col1a2,Sdc1,
+430,4,1,1,3,0,2591,2591,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,5,Col1a2,Sdc1,
+430,4,1,1,4,0,792,792,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,7,Col1a2,Sdc1,
+430,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Col1a2,Sdc1,
+430,4,6,1,2,0.772496998310089,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Col1a2,Sdc1,0.772496998310089
+430,4,6,1,3,0.804776787757874,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Col1a2,Sdc1,0.804776787757874
+430,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Col1a2,Sdc1,
+430,4,7,1,1,0,156,156,0,TRUE,FALSE,FAPs,MuSCs and progenitors,0,Col1a2,Sdc1,
+430,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Col1a2,Sdc1,
+430,4,7,1,3,0.908970236778259,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Col1a2,Sdc1,0.908970236778259
+430,4,7,1,4,0.846885502338409,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Col1a2,Sdc1,0.846885502338409
+430,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Col1a2,Sdc1,
+430,4,9,1,2,0.763526380062103,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Col1a2,Sdc1,0.763526380062103
+430,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Col1a2,Sdc1,
+430,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Col1a2,Sdc1,
+430,4,10,1,1,0.751118361949921,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Col1a2,Sdc1,0.751118361949921
+430,4,10,1,2,0.693374633789063,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Col1a2,Sdc1,0.693374633789063
+430,4,10,1,3,0,820,820,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,5,Col1a2,Sdc1,
+430,4,10,1,4,0,304,304,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,7,Col1a2,Sdc1,
+447,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Fn1,Sdc1,
+447,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Fn1,Sdc1,
+447,4,1,1,3,0,2591,2591,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,5,Fn1,Sdc1,
+447,4,1,1,4,0,792,792,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,7,Fn1,Sdc1,
+447,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Fn1,Sdc1,
+447,4,6,1,2,0.723929822444916,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Fn1,Sdc1,0.723929822444916
+447,4,6,1,3,0.76561576128006,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Fn1,Sdc1,0.76561576128006
+447,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Fn1,Sdc1,
+447,4,7,1,1,0,156,156,0,TRUE,FALSE,FAPs,MuSCs and progenitors,0,Fn1,Sdc1,
+447,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Fn1,Sdc1,
+447,4,7,1,3,0.887795925140381,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Fn1,Sdc1,0.887795925140381
+447,4,7,1,4,0.804564237594605,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Fn1,Sdc1,0.804564237594605
+447,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Fn1,Sdc1,
+447,4,9,1,2,0.713753759860992,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Fn1,Sdc1,0.713753759860992
+447,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Fn1,Sdc1,
+447,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Fn1,Sdc1,
+447,4,10,1,1,0.683165192604065,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Fn1,Sdc1,0.683165192604065
+447,4,10,1,2,0.635878145694733,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Fn1,Sdc1,0.635878145694733
+447,4,10,1,3,0,820,820,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,5,Fn1,Sdc1,
+447,4,10,1,4,0,304,304,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,7,Fn1,Sdc1,
+453,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Thbs2,Sdc1,
+453,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Thbs2,Sdc1,
+453,4,1,1,3,0,2591,2591,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,5,Thbs2,Sdc1,
+453,4,1,1,4,0,792,792,0,TRUE,FALSE,FAPs,Anti-inflammatory macrophages,7,Thbs2,Sdc1,
+453,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Thbs2,Sdc1,
+453,4,6,1,2,0.587901711463928,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Thbs2,Sdc1,0.587901711463928
+453,4,6,1,3,0.688972771167755,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Thbs2,Sdc1,0.688972771167755
+453,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Thbs2,Sdc1,
+453,4,7,1,1,0,156,156,0,TRUE,FALSE,FAPs,MuSCs and progenitors,0,Thbs2,Sdc1,
+453,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Thbs2,Sdc1,
+453,4,7,1,3,0.842907905578613,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Thbs2,Sdc1,0.842907905578613
+453,4,7,1,4,0.649974703788757,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Thbs2,Sdc1,0.649974703788757
+453,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Thbs2,Sdc1,
+453,4,9,1,2,0.575650691986084,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Thbs2,Sdc1,0.575650691986084
+453,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Thbs2,Sdc1,
+453,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Thbs2,Sdc1,
+453,4,10,1,1,0.474876642227173,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Thbs2,Sdc1,0.474876642227173
+453,4,10,1,2,0.487197071313858,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Thbs2,Sdc1,0.487197071313858
+453,4,10,1,3,0,820,820,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,5,Thbs2,Sdc1,
+453,4,10,1,4,0,304,304,0,TRUE,FALSE,FAPs,Resident Macrophages/APCs,7,Thbs2,Sdc1,
+457,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Col1a1,Sdc4,
+457,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Col1a1,Sdc4,
+457,4,1,1,3,0.887267887592316,2591,2591,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,5,Col1a1,Sdc4,0.887267887592316
+457,4,1,1,4,0.888617157936096,792,792,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,7,Col1a1,Sdc4,0.888617157936096
+457,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Col1a1,Sdc4,
+457,4,6,1,2,0.854416251182556,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Col1a1,Sdc4,0.854416251182556
+457,4,6,1,3,0.887593924999237,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Col1a1,Sdc4,0.887593924999237
+457,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Col1a1,Sdc4,
+457,4,7,1,1,0.924882471561432,156,156,0,TRUE,TRUE,FAPs,MuSCs and progenitors,0,Col1a1,Sdc4,0.924882471561432
+457,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Col1a1,Sdc4,
+457,4,7,1,3,0.916637122631073,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Col1a1,Sdc4,0.916637122631073
+457,4,7,1,4,0.920045256614685,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Col1a1,Sdc4,0.920045256614685
+457,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Col1a1,Sdc4,
+457,4,9,1,2,0.844251573085785,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Col1a1,Sdc4,0.844251573085785
+457,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Col1a1,Sdc4,
+457,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Col1a1,Sdc4,
+457,4,10,1,1,0.849919378757477,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Col1a1,Sdc4,0.849919378757477
+457,4,10,1,2,0.849691867828369,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Col1a1,Sdc4,0.849691867828369
+457,4,10,1,3,0.860892653465271,820,820,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,5,Col1a1,Sdc4,0.860892653465271
+457,4,10,1,4,0.860738694667816,304,304,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,7,Col1a1,Sdc4,0.860738694667816
+458,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Col1a2,Sdc4,
+458,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Col1a2,Sdc4,
+458,4,1,1,3,0.885875225067139,2591,2591,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,5,Col1a2,Sdc4,0.885875225067139
+458,4,1,1,4,0.88991379737854,792,792,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,7,Col1a2,Sdc4,0.88991379737854
+458,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Col1a2,Sdc4,
+458,4,6,1,2,0.862044870853424,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Col1a2,Sdc4,0.862044870853424
+458,4,6,1,3,0.886204779148102,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Col1a2,Sdc4,0.886204779148102
+458,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Col1a2,Sdc4,
+458,4,7,1,1,0.930433571338654,156,156,0,TRUE,TRUE,FAPs,MuSCs and progenitors,0,Col1a2,Sdc4,0.930433571338654
+458,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Col1a2,Sdc4,
+458,4,7,1,3,0.915572762489319,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Col1a2,Sdc4,0.915572762489319
+458,4,7,1,4,0.9210085272789,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Col1a2,Sdc4,0.9210085272789
+458,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Col1a2,Sdc4,
+458,4,9,1,2,0.852320790290833,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Col1a2,Sdc4,0.852320790290833
+458,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Col1a2,Sdc4,
+458,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Col1a2,Sdc4,
+458,4,10,1,1,0.860172629356384,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Col1a2,Sdc4,0.860172629356384
+458,4,10,1,2,0.857526779174805,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Col1a2,Sdc4,0.857526779174805
+458,4,10,1,3,0.859225869178772,820,820,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,5,Col1a2,Sdc4,0.859225869178772
+458,4,10,1,4,0.862309575080872,304,304,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,7,Col1a2,Sdc4,0.862309575080872
+475,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Fn1,Sdc4,
+475,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Fn1,Sdc4,
+475,4,1,1,3,0.860155344009399,2591,2591,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,5,Fn1,Sdc4,0.860155344009399
+475,4,1,1,4,0.85748428106308,792,792,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,7,Fn1,Sdc4,0.85748428106308
+475,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Fn1,Sdc4,
+475,4,6,1,2,0.828346431255341,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Fn1,Sdc4,0.828346431255341
+475,4,6,1,3,0.860547482967377,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Fn1,Sdc4,0.860547482967377
+475,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Fn1,Sdc4,
+475,4,7,1,1,0.905264556407928,156,156,0,TRUE,TRUE,FAPs,MuSCs and progenitors,0,Fn1,Sdc4,0.905264556407928
+475,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Fn1,Sdc4,
+475,4,7,1,3,0.895758152008057,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Fn1,Sdc4,0.895758152008057
+475,4,7,1,4,0.896675527095795,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Fn1,Sdc4,0.896675527095795
+475,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Fn1,Sdc4,
+475,4,9,1,2,0.816752016544342,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Fn1,Sdc4,0.816752016544342
+475,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Fn1,Sdc4,
+475,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Fn1,Sdc4,
+475,4,10,1,1,0.814647316932678,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Fn1,Sdc4,0.814647316932678
+475,4,10,1,2,0.822951376438141,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Fn1,Sdc4,0.822951376438141
+475,4,10,1,3,0.828661680221558,820,820,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,5,Fn1,Sdc4,0.828661680221558
+475,4,10,1,4,0.823362350463867,304,304,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,7,Fn1,Sdc4,0.823362350463867
+481,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Thbs2,Sdc4,
+481,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Thbs2,Sdc4,
+481,4,1,1,3,0.806618094444275,2591,2591,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,5,Thbs2,Sdc4,0.806618094444275
+481,4,1,1,4,0.730745673179627,792,792,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,7,Thbs2,Sdc4,0.730745673179627
+481,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Thbs2,Sdc4,
+481,4,6,1,2,0.724164068698883,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Thbs2,Sdc4,0.724164068698883
+481,4,6,1,3,0.807126760482788,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Thbs2,Sdc4,0.807126760482788
+481,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Thbs2,Sdc4,
+481,4,7,1,1,0.800305426120758,156,156,0,TRUE,TRUE,FAPs,MuSCs and progenitors,0,Thbs2,Sdc4,0.800305426120758
+481,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Thbs2,Sdc4,
+481,4,7,1,3,0.853529870510101,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Thbs2,Sdc4,0.853529870510101
+481,4,7,1,4,0.796518981456757,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Thbs2,Sdc4,0.796518981456757
+481,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Thbs2,Sdc4,
+481,4,9,1,2,0.708013117313385,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Thbs2,Sdc4,0.708013117313385
+481,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Thbs2,Sdc4,
+481,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Thbs2,Sdc4,
+481,4,10,1,1,0.648296713829041,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Thbs2,Sdc4,0.648296713829041
+481,4,10,1,2,0.716614782810211,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Thbs2,Sdc4,0.716614782810211
+481,4,10,1,3,0.76634281873703,820,820,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,5,Thbs2,Sdc4,0.76634281873703
+481,4,10,1,4,0.67768532037735,304,304,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,7,Thbs2,Sdc4,0.67768532037735
+519,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Thbs2,Cd36,
+519,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Thbs2,Cd36,
+519,4,1,1,3,0.751890122890472,2591,2591,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,5,Thbs2,Cd36,0.751890122890472
+519,4,1,1,4,0.701292335987091,792,792,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,7,Thbs2,Cd36,0.701292335987091
+519,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Thbs2,Cd36,
+519,4,6,1,2,0.844854235649109,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Thbs2,Cd36,0.844854235649109
+519,4,6,1,3,0.868509292602539,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Thbs2,Cd36,0.868509292602539
+519,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Thbs2,Cd36,
+519,4,7,1,1,0.650715291500092,156,156,0,TRUE,TRUE,FAPs,MuSCs and progenitors,0,Thbs2,Cd36,0.650715291500092
+519,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Thbs2,Cd36,
+519,4,7,1,3,0.608824133872986,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Thbs2,Cd36,0.608824133872986
+519,4,7,1,4,0.492320150136948,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Thbs2,Cd36,0.492320150136948
+519,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Thbs2,Cd36,
+519,4,9,1,2,0.747500956058502,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Thbs2,Cd36,0.747500956058502
+519,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Thbs2,Cd36,
+519,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Thbs2,Cd36,
+519,4,10,1,1,0.736739575862885,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Thbs2,Cd36,0.736739575862885
+519,4,10,1,2,0.657104432582855,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Thbs2,Cd36,0.657104432582855
+519,4,10,1,3,0.725286424160004,820,820,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,5,Thbs2,Cd36,0.725286424160004
+519,4,10,1,4,0.672035813331604,304,304,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,7,Thbs2,Cd36,0.672035813331604
+524,4,1,1,1,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,0,Thbs2,Cd47,
+524,4,1,1,2,,0,0,0,FALSE,FALSE,FAPs,Anti-inflammatory macrophages,2,Thbs2,Cd47,
+524,4,1,1,3,0.888735473155975,2591,2591,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,5,Thbs2,Cd47,0.888735473155975
+524,4,1,1,4,0.803771078586578,792,792,0,TRUE,TRUE,FAPs,Anti-inflammatory macrophages,7,Thbs2,Cd47,0.803771078586578
+524,4,6,1,1,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,0,Thbs2,Cd47,
+524,4,6,1,2,0.815557420253754,583,583,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,2,Thbs2,Cd47,0.815557420253754
+524,4,6,1,3,0.884653627872467,2591,2591,0,TRUE,TRUE,FAPs,Monocytes/Macrophages/Platelets,5,Thbs2,Cd47,0.884653627872467
+524,4,6,1,4,,0,0,0,FALSE,FALSE,FAPs,Monocytes/Macrophages/Platelets,7,Thbs2,Cd47,
+524,4,7,1,1,0.703204035758972,156,156,0,TRUE,TRUE,FAPs,MuSCs and progenitors,0,Thbs2,Cd47,0.703204035758972
+524,4,7,1,2,,0,0,0,FALSE,FALSE,FAPs,MuSCs and progenitors,2,Thbs2,Cd47,
+524,4,7,1,3,0.871401071548462,1641,1641,0,TRUE,TRUE,FAPs,MuSCs and progenitors,5,Thbs2,Cd47,0.871401071548462
+524,4,7,1,4,0.752467453479767,786,786,0,TRUE,TRUE,FAPs,MuSCs and progenitors,7,Thbs2,Cd47,0.752467453479767
+524,4,9,1,1,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,0,Thbs2,Cd47,
+524,4,9,1,2,0.833595037460327,583,583,0,TRUE,TRUE,FAPs,Pro-inflammatory macrophages,2,Thbs2,Cd47,0.833595037460327
+524,4,9,1,3,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,5,Thbs2,Cd47,
+524,4,9,1,4,,0,0,0,FALSE,FALSE,FAPs,Pro-inflammatory macrophages,7,Thbs2,Cd47,
+524,4,10,1,1,0.764161646366119,164,164,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,0,Thbs2,Cd47,0.764161646366119
+524,4,10,1,2,0.844050109386444,560,560,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,2,Thbs2,Cd47,0.844050109386444
+524,4,10,1,3,0.89774215221405,820,820,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,5,Thbs2,Cd47,0.89774215221405
+524,4,10,1,4,0.818641722202301,304,304,0,TRUE,TRUE,FAPs,Resident Macrophages/APCs,7,Thbs2,Cd47,0.818641722202301

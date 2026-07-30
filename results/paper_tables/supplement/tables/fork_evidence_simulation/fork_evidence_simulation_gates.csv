@@ -1,0 +1,9 @@
+gate,observed,threshold,comparison,passed
+integrated_auroc,0.974877777777778,0.9,>=,TRUE
+true_positive_rate,0.913333333333333,0.8,>=,TRUE
+specificity,1,0.95,>=,TRUE
+shared_trend_cancellation,1,0.95,>=,TRUE
+donor_confounded_rejection,1,0.95,>=,TRUE
+low_expression_rejection,1,0.95,>=,TRUE
+dropout_recovery,0.74,0.7,>=,TRUE
+nested_fork_recovery,1,0.8,>=,TRUE

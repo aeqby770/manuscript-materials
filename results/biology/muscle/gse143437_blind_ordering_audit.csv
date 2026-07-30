@@ -1,0 +1,2 @@
+dataset,n_cells,direction_agnostic_abs_spearman,cell_spearman,blind_root_day,blind_root_cell_type,evaluation_axis,application_axis
+GSE143437,34438,0.0599552152374627,-0.0599552152374627,2,Monocytes/Macrophages/Platelets,recorded injury day withheld from blind inference,observed injury day

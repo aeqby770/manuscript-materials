@@ -1,0 +1,5 @@
+analysis,n_cells,n_temporal_trajectories,n_common_with_full,effect_spearman_vs_full,top30_jaccard_vs_full
+full,34456,3698,3698,1,1
+exclude_Leiden2_3,31167,3158,3046,0.90140237043104,0.5
+exclude_Leiden3,33938,3517,3449,0.95803559458701,0.714285714285714
+exact_atlas_mapped_only,25193,3465,2904,0.612312330854054,0.0714285714285714

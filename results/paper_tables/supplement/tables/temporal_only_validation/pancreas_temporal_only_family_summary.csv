@@ -1,0 +1,4 @@
+family,n_pairs,mean_temporal_score,max_temporal_score,dataset
+other,1,0.670028523802757,0.802445113658905,pancreas
+MDK-axis,2,0.602287468133551,0.742432236671448,pancreas
+Notch,1,0.579434224444887,0.771356105804443,pancreas

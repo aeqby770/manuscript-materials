@@ -1,0 +1,7 @@
+axis,n_tumor_patients,n_evaluable_patients,median_expression_proxy,min_expression_proxy,max_expression_proxy,direction,minimum_cells_per_subtype
+WNT5A-FZD2,23,17,0.093044356,0.0,0.1596863,fibroblast to macrophage,5
+CCL3-CCR5,23,17,0.14242388,0.0,0.35586476,fibroblast to macrophage,5
+RARRES2-CMKLR1,23,17,0.5819534,0.41236216,0.8749144,fibroblast to macrophage,5
+IL1A-IL1R1_IL1RAP,23,17,0.101340115,0.0,0.20787661,macrophage to fibroblast,5
+IL1B-IL1R1_IL1RAP,23,17,0.2778403,0.0,0.5632661,macrophage to fibroblast,5
+SPP1-CD44,23,17,1.2367748,0.41650367,1.8065481,macrophage to fibroblast,5

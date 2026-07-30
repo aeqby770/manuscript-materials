@@ -1,0 +1,9 @@
+{
+  "content_contract": "liana_rank_aggregate_native_v1",
+  "dataset": "pancreas",
+  "canonical_source_path": "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\curated\\pancreas_benchmark.h5ad",
+  "n_cells": 3696,
+  "n_genes": 27998,
+  "groupby": "clusters",
+  "resource": "mouseconsensus"
+}

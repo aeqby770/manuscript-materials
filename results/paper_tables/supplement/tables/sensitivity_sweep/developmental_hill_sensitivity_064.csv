@@ -1,0 +1,9 @@
+dataset,hill_k,top30_jaccard_vs_k1,top_pair,top_pair_score,transformation
+pancreas,0.5,0.935483870967742,Mdk___Ncl,0.927937701659188,score/(score+k*(1-score))
+pancreas,1,1,Mdk___Ncl,0.866684941365757,score/(score+k*(1-score))
+pancreas,2,0.875,Mdk___Ncl,0.767334578882972,score/(score+k*(1-score))
+pancreas,5,0.875,Mdk___Ncl,0.574945327181046,score/(score+k*(1-score))
+dentategyrus,0.5,0.935483870967742,Psap___Gpr37l1,0.864657095033346,score/(score+k*(1-score))
+dentategyrus,1,1,Psap___Gpr37l1,0.770813825726509,score/(score+k*(1-score))
+dentategyrus,2,0.935483870967742,Psap___Gpr37l1,0.643733110915562,score/(score+k*(1-score))
+dentategyrus,5,0.818181818181818,Cldn11___Cldn11,0.46960747818685,score/(score+k*(1-score))

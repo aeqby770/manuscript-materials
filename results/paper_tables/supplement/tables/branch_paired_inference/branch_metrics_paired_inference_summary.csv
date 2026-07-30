@@ -1,0 +1,3 @@
+metric,n_paired_datasets,LineaLinkR_mean,slingshot_mean,mean_paired_difference,bootstrap_ci95_lo,bootstrap_ci95_hi,exact_sign_flip_p_two_sided,paired_wilcoxon_p_two_sided,n_positive_differences,n_zero_differences,n_negative_differences,bootstrap_seed,bootstrap_replicates,inference_unit
+one_to_one_branch_segment_macro_F1,4,0.868537117471801,0.564142514938822,0.30439460253298,-0.0104988765422653,0.595436309452106,0.25,0.25,3,0,1,12345,10000,dataset
+lineage_ARI,4,0.800164913682952,0.105130719339422,0.695034194343531,0.293768366295381,1,0.125,0.0975125381781096,4,0,0,12345,10000,dataset

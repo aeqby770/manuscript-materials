@@ -1,0 +1,17 @@
+group_id,context,sample_id,fap_status,injury_status,replicate,n_cells
+FAP compartment|AB_1INJ,FAP compartment,AB_1INJ,depleted,3dpi,1,863
+FAP compartment|AB_1U,FAP compartment,AB_1U,depleted,uninjured,1,124
+FAP compartment|AB_2INJ,FAP compartment,AB_2INJ,depleted,3dpi,2,1064
+FAP compartment|AB_2U,FAP compartment,AB_2U,depleted,uninjured,2,104
+FAP compartment|CT_1INJ,FAP compartment,CT_1INJ,control,3dpi,1,496
+FAP compartment|CT_1U,FAP compartment,CT_1U,control,uninjured,1,112
+FAP compartment|CT_2INJ,FAP compartment,CT_2INJ,control,3dpi,2,369
+FAP compartment|CT_2U,FAP compartment,CT_2U,control,uninjured,2,86
+Mononuclear phagocytes|AB_1INJ,Mononuclear phagocytes,AB_1INJ,depleted,3dpi,1,773
+Mononuclear phagocytes|AB_1U,Mononuclear phagocytes,AB_1U,depleted,uninjured,1,661
+Mononuclear phagocytes|AB_2INJ,Mononuclear phagocytes,AB_2INJ,depleted,3dpi,2,980
+Mononuclear phagocytes|AB_2U,Mononuclear phagocytes,AB_2U,depleted,uninjured,2,1069
+Mononuclear phagocytes|CT_1INJ,Mononuclear phagocytes,CT_1INJ,control,3dpi,1,1858
+Mononuclear phagocytes|CT_1U,Mononuclear phagocytes,CT_1U,control,uninjured,1,724
+Mononuclear phagocytes|CT_2INJ,Mononuclear phagocytes,CT_2INJ,control,3dpi,2,1425
+Mononuclear phagocytes|CT_2U,Mononuclear phagocytes,CT_2U,control,uninjured,2,1052

@@ -1,0 +1,5 @@
+endpoint,estimate,lower_95,upper_95,n_cells,inference_scope
+direction_agnostic_pseudotime_vs_sampling_time_abs_spearman,0.787702446536836,,,7942,primary direction-agnostic ordering evaluation
+direction_agnostic_pseudotime_discrimination_t96_vs_t120_auc,0.9725247363257976,,,7942,primary direction-agnostic ordering evaluation
+signed_pseudotime_vs_sampling_time_spearman,-0.787702446536836,,,7942,secondary signed blind-direction diagnostic
+pseudotime_discrimination_t96_vs_t120_auc,0.0274752636742022,,,7942,secondary signed blind-direction diagnostic

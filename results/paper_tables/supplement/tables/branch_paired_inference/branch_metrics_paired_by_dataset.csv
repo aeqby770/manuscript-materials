@@ -1,0 +1,9 @@
+dataset,metric,LineaLinkR,slingshot,LineaLinkR_minus_slingshot
+sim_2br_2000c,lineage_ARI,1,0,1
+sim_2br_5000c,lineage_ARI,1,0,1
+sim_2br_500c,lineage_ARI,1,0.278221044353052,0.721778955646948
+simulated_branch,lineage_ARI,0.200659654731809,0.142301833004634,0.058357821727175
+sim_2br_2000c,one_to_one_branch_segment_macro_F1,1,0.404858299595142,0.595141700404858
+sim_2br_5000c,one_to_one_branch_segment_macro_F1,1,0.404269081500647,0.595730918499353
+sim_2br_500c,one_to_one_branch_segment_macro_F1,1,0.76091513991432,0.23908486008568
+simulated_branch,one_to_one_branch_segment_macro_F1,0.474148469887204,0.686527538745177,-0.212379068857973

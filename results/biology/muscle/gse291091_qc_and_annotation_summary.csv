@@ -1,0 +1,89 @@
+sample_id,fap_status,injury_status,n_cells,median_counts,median_genes,median_pct_mt,stage,cell_type,median_label_confidence
+CT_1U,control,uninjured,2867,1858.0,891.0,2.9213483,before_qc,,
+CT_2U,control,uninjured,3503,1685.0,767.0,2.5289779,before_qc,,
+AB_1U,depleted,uninjured,2900,1705.5,787.5,2.4923244,before_qc,,
+AB_2U,depleted,uninjured,3297,1746.0,765.0,2.093458,before_qc,,
+CT_1INJ,control,3dpi,6430,3797.0,1346.5,1.3282158,before_qc,,
+CT_2INJ,control,3dpi,4796,4336.5,1470.5,1.3786163,before_qc,,
+AB_1INJ,depleted,3dpi,5322,3873.0,1309.0,2.049509,before_qc,,
+AB_2INJ,depleted,3dpi,5455,4161.0,1393.0,2.0967326,before_qc,,
+CT_1U,control,uninjured,2768,1832.5,883.0,2.9211316,after_qc,,
+CT_2U,control,uninjured,3376,1650.5,756.5,2.5180697,after_qc,,
+AB_1U,depleted,uninjured,2827,1676.0,780.0,2.4927747,after_qc,,
+AB_2U,depleted,uninjured,3175,1699.0,756.0,2.0747375,after_qc,,
+CT_1INJ,control,3dpi,5988,3661.0,1313.0,1.2969606,after_qc,,
+CT_2INJ,control,3dpi,4306,4076.0,1414.0,1.3153114,after_qc,,
+AB_1INJ,depleted,3dpi,5041,3778.0,1284.0,2.062952,after_qc,,
+AB_2INJ,depleted,3dpi,5077,3985.0,1356.0,2.105767,after_qc,,
+CT_1U,control,uninjured,1444,,,,annotation,Endothelial,1.0
+CT_1U,control,uninjured,38,,,,annotation,FAP-like/Tenocytes,0.68168583811848
+CT_1U,control,uninjured,74,,,,annotation,FAPs,0.9605327303922107
+CT_1U,control,uninjured,109,,,,annotation,Lymphoid/APCs,0.9584767162489836
+CT_1U,control,uninjured,724,,,,annotation,Mononuclear phagocytes,1.0
+CT_1U,control,uninjured,5,,,,annotation,Neutrophils,0.921874037832926
+CT_1U,control,uninjured,226,,,,annotation,Quiescent MuSCs,1.0
+CT_1U,control,uninjured,109,,,,annotation,Smooth muscle cells,0.9218193636798299
+CT_1U,control,uninjured,39,,,,annotation,unassigned,0.9250094219400596
+CT_2U,control,uninjured,1491,,,,annotation,Endothelial,0.9620916795585451
+CT_2U,control,uninjured,40,,,,annotation,FAP-like/Tenocytes,0.7944110917680376
+CT_2U,control,uninjured,46,,,,annotation,FAPs,0.7674525288264713
+CT_2U,control,uninjured,191,,,,annotation,Lymphoid/APCs,0.8824701779005092
+CT_2U,control,uninjured,1052,,,,annotation,Mononuclear phagocytes,0.7956802221360837
+CT_2U,control,uninjured,14,,,,annotation,Neutrophils,0.7207887717455972
+CT_2U,control,uninjured,222,,,,annotation,Quiescent MuSCs,1.0
+CT_2U,control,uninjured,158,,,,annotation,Smooth muscle cells,0.8842057042757678
+CT_2U,control,uninjured,162,,,,annotation,unassigned,0.8172297169306346
+AB_1U,depleted,uninjured,1649,,,,annotation,Endothelial,1.0
+AB_1U,depleted,uninjured,9,,,,annotation,FAP-like/Tenocytes,0.6446267091405243
+AB_1U,depleted,uninjured,115,,,,annotation,FAPs,0.9608642614664568
+AB_1U,depleted,uninjured,119,,,,annotation,Lymphoid/APCs,0.9197578210014615
+AB_1U,depleted,uninjured,661,,,,annotation,Mononuclear phagocytes,1.0
+AB_1U,depleted,uninjured,1,,,,annotation,Neutrophils,0.921833007183761
+AB_1U,depleted,uninjured,33,,,,annotation,Quiescent MuSCs,1.0
+AB_1U,depleted,uninjured,151,,,,annotation,Smooth muscle cells,0.8824997395756422
+AB_1U,depleted,uninjured,89,,,,annotation,unassigned,0.853431287101502
+AB_2U,depleted,uninjured,1495,,,,annotation,Endothelial,1.0
+AB_2U,depleted,uninjured,46,,,,annotation,FAP-like/Tenocytes,0.721809145951892
+AB_2U,depleted,uninjured,58,,,,annotation,FAPs,0.9058857139537624
+AB_2U,depleted,uninjured,168,,,,annotation,Lymphoid/APCs,0.9129579329142308
+AB_2U,depleted,uninjured,1069,,,,annotation,Mononuclear phagocytes,1.0
+AB_2U,depleted,uninjured,5,,,,annotation,Neutrophils,0.8764269257038747
+AB_2U,depleted,uninjured,73,,,,annotation,Quiescent MuSCs,1.0
+AB_2U,depleted,uninjured,172,,,,annotation,Smooth muscle cells,0.9181045131634105
+AB_2U,depleted,uninjured,89,,,,annotation,unassigned,0.860300588912814
+CT_1INJ,control,3dpi,800,,,,annotation,Endothelial,0.9606320153152696
+CT_1INJ,control,3dpi,452,,,,annotation,FAP-like/Tenocytes,0.7167925095601859
+CT_1INJ,control,3dpi,44,,,,annotation,FAPs,0.9213036737137386
+CT_1INJ,control,3dpi,455,,,,annotation,Lymphoid/APCs,1.0
+CT_1INJ,control,3dpi,1858,,,,annotation,Mononuclear phagocytes,0.6826071631884396
+CT_1INJ,control,3dpi,2297,,,,annotation,Neutrophils,0.8054251742629536
+CT_1INJ,control,3dpi,14,,,,annotation,Quiescent MuSCs,1.0
+CT_1INJ,control,3dpi,8,,,,annotation,Smooth muscle cells,0.676031838941525
+CT_1INJ,control,3dpi,60,,,,annotation,unassigned,0.6362118310677349
+CT_2INJ,control,3dpi,450,,,,annotation,Endothelial,0.9610906081567523
+CT_2INJ,control,3dpi,337,,,,annotation,FAP-like/Tenocytes,0.6851298940830158
+CT_2INJ,control,3dpi,32,,,,annotation,FAPs,0.9617885470882974
+CT_2INJ,control,3dpi,359,,,,annotation,Lymphoid/APCs,1.0
+CT_2INJ,control,3dpi,1425,,,,annotation,Mononuclear phagocytes,0.6832368990134723
+CT_2INJ,control,3dpi,1659,,,,annotation,Neutrophils,0.8386335487300508
+CT_2INJ,control,3dpi,5,,,,annotation,Quiescent MuSCs,1.0
+CT_2INJ,control,3dpi,8,,,,annotation,Smooth muscle cells,0.5659959427947885
+CT_2INJ,control,3dpi,31,,,,annotation,unassigned,0.6814667363869213
+AB_1INJ,depleted,3dpi,2681,,,,annotation,Endothelial,0.9586595053366521
+AB_1INJ,depleted,3dpi,796,,,,annotation,FAP-like/Tenocytes,0.6482265849621185
+AB_1INJ,depleted,3dpi,67,,,,annotation,FAPs,0.9606684089431834
+AB_1INJ,depleted,3dpi,362,,,,annotation,Lymphoid/APCs,1.0
+AB_1INJ,depleted,3dpi,773,,,,annotation,Mononuclear phagocytes,0.6821163937577736
+AB_1INJ,depleted,3dpi,331,,,,annotation,Neutrophils,0.8366776889740093
+AB_1INJ,depleted,3dpi,1,,,,annotation,Quiescent MuSCs,0.9626943351381478
+AB_1INJ,depleted,3dpi,13,,,,annotation,Smooth muscle cells,0.7635050623247811
+AB_1INJ,depleted,3dpi,17,,,,annotation,unassigned,0.5603578759733768
+AB_2INJ,depleted,3dpi,2035,,,,annotation,Endothelial,0.96009485563313
+AB_2INJ,depleted,3dpi,985,,,,annotation,FAP-like/Tenocytes,0.6812917694223476
+AB_2INJ,depleted,3dpi,79,,,,annotation,FAPs,0.9599631702816809
+AB_2INJ,depleted,3dpi,232,,,,annotation,Lymphoid/APCs,0.8775563616541491
+AB_2INJ,depleted,3dpi,980,,,,annotation,Mononuclear phagocytes,0.7239331106363323
+AB_2INJ,depleted,3dpi,720,,,,annotation,Neutrophils,0.8021927502761201
+AB_2INJ,depleted,3dpi,2,,,,annotation,Quiescent MuSCs,1.0
+AB_2INJ,depleted,3dpi,28,,,,annotation,Smooth muscle cells,0.6551826760851033
+AB_2INJ,depleted,3dpi,16,,,,annotation,unassigned,0.575862640793122
