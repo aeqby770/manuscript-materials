@@ -1,0 +1,17 @@
+tier,path_type,relative_path,notes
+curated,h5ad,curated/lung_benchmark.h5ad,Table1 curated benchmark
+curated,h5ad,curated/paul15_benchmark.h5ad,Table1 curated benchmark
+curated,h5ad,curated/pancreas_benchmark.h5ad,Table1 curated benchmark
+curated,h5ad,curated/dentategyrus_benchmark.h5ad,Table1 curated benchmark
+curated,h5ad,curated/cellrank_stemnet_benchmark.h5ad,Table1 curated benchmark
+curated,h5ad,curated/cellrank_bone_marrow_benchmark.h5ad,Table1 curated benchmark
+curated,h5ad,curated/cellagentchat_scc_processed_benchmark.h5ad,Table1 curated benchmark
+curated,h5ad,curated/monocle3_worm_l2_benchmark.h5ad,Table1 curated benchmark
+canonical,h5ad,canonical/*_canonical.h5ad,Normalized inputs for pipeline 02 (33 files)
+literature,h5ad,literature_benchmarks/<dataset>/<dataset>.h5ad,Literature sources per CONFIG datasets_literature
+geo_candidate,h5ad,geo_candidates/GSE243917/GSE243917_genesXcells_ALL_raw.h5ad,GEO candidate
+geo_candidate,h5ad,geo_candidates/GSE210152/GSE210152_raw.h5ad,GEO candidate
+geo_curated,dir,geo_curated/GSE*,Raw GEO bundles (not yet h5ad)
+manifest,json,manifests/dataset_manifest.json,Dataset registry
+manifest,json,manifests/geo_curated_manifest.json,GEO curated registry
+manifest,json,manifests/geo_candidate_manifest.json,GEO candidate registry

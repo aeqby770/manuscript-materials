@@ -1,0 +1,33 @@
+{
+  "dataset": "human_fetal_pancreas",
+  "source_accession": "GSE197064",
+  "output": "F:\\biotrade\\0.64LLR\\cache\\canonical_candidates\\human_fetal_pancreas.h5ad",
+  "shape": [
+    28430,
+    32955
+  ],
+  "timepoint_counts": {
+    "13PCW": 7458,
+    "12PCW": 4322,
+    "19PCW": 4076,
+    "14PCW": 3745,
+    "18PCW": 2564,
+    "unassigned": 2140,
+    "20PCW": 2122,
+    "15PCW": 2003
+  },
+  "pcw_nonmissing": 26290,
+  "cell_id_rule": "<GSM accession>|<source_cell_id>",
+  "source_raw_files": [
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_pancreas\\GSM5907965_121313_final_matrix.csv.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_pancreas\\GSM5907966_121419_final_matrix.csv.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_pancreas\\GSM5907967_131419_final_matrix.csv.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_pancreas\\GSM5907968_151820_final_matrix.csv.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_pancreas\\GSM5907965_demultiplexing_121313PCW.csv.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_pancreas\\GSM5907966_demultiplexing_121419PCW.csv.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_pancreas\\GSM5907967_demultiplexing_131419PCW.csv.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_pancreas\\GSM5907968_demultiplexing_151820PCW.csv.gz"
+  ],
+  "matrix_contract": "cells_by_ensembl_genes_sparse_int32",
+  "development_reference_search": "none in 0.6.4 pipeline/manuscript/qa"
+}

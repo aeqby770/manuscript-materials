@@ -1,0 +1,4 @@
+dataset	role	reason	source_status
+smoke_human_cd34_500c	legacy_alias	500-cell smoke subset of human_cd34; not an independent benchmark object	archived_from_active_panel
+cellrank_bone_marrow	legacy_alias	5,780-cell object duplicates human_cd34 and bonemarrow_scvelo	archived_from_active_panel
+bonemarrow_scvelo	legacy_alias	5,780-cell object duplicates human_cd34 and cellrank_bone_marrow	archived_from_active_panel

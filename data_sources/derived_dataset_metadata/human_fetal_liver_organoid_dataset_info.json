@@ -1,0 +1,28 @@
+{
+  "dataset": "human_fetal_liver_organoid",
+  "source_accession": "GSE230051",
+  "output": "F:\\biotrade\\0.64LLR\\cache\\canonical_candidates\\human_fetal_liver_organoid.h5ad",
+  "shape": [
+    22874,
+    24351
+  ],
+  "timepoint_counts": {
+    "day20": 7024,
+    "day13": 6013,
+    "day16": 5537,
+    "day10": 4300
+  },
+  "cell_id_rule": "<day>|<source_cell_id>",
+  "source_raw_files": [
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_liver_organoid\\GSM7184537_day_10_counts.txt.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_liver_organoid\\GSM7184538_day_13_counts.txt.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_liver_organoid\\GSM7184539_day_16_counts.txt.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_liver_organoid\\GSM7184540_day_20_counts.txt.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_liver_organoid\\GSM7184537_day_10_metadata.txt.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_liver_organoid\\GSM7184538_day_13_metadata.txt.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_liver_organoid\\GSM7184539_day_16_metadata.txt.gz",
+    "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\literature_benchmarks\\human_fetal_liver_organoid\\GSM7184540_day_20_metadata.txt.gz"
+  ],
+  "matrix_contract": "cells_by_genes_sparse_float32",
+  "development_reference_search": "none in 0.6.4 pipeline/manuscript/qa"
+}

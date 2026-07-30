@@ -1,0 +1,212 @@
+[
+  {
+    "name": "lung_benchmark",
+    "path": "F:/biotrade/LineaLinkR_benchmark_assets/data/lung_benchmark.h5ad",
+    "shape": [
+      32559,
+      24051
+    ],
+    "obs_columns": [
+      "cell_type",
+      "identifier",
+      "louvain_cluster",
+      "meta_celltype",
+      "n_counts",
+      "n_genes",
+      "percent_mito",
+      "sample_id",
+      "time_point",
+      "umap_1",
+      "umap_2"
+    ],
+    "var_columns": [],
+    "uns_keys": "source_name"
+  },
+  {
+    "name": "paul15_benchmark",
+    "path": "F:/biotrade/LineaLinkR_benchmark_assets/data/paul15_benchmark.h5ad",
+    "shape": [
+      2730,
+      3451
+    ],
+    "obs_columns": "paul15_clusters",
+    "var_columns": [],
+    "uns_keys": [
+      "iroot",
+      "source_name"
+    ]
+  },
+  {
+    "name": "pancreas_benchmark",
+    "path": "F:/biotrade/LineaLinkR_benchmark_assets/data/pancreas_benchmark.h5ad",
+    "shape": [
+      3696,
+      27998
+    ],
+    "obs_columns": [
+      "G2M_score",
+      "S_score",
+      "clusters",
+      "clusters_coarse",
+      "index"
+    ],
+    "var_columns": [
+      "highly_variable_genes",
+      "index"
+    ],
+    "uns_keys": [
+      "clusters_coarse_colors",
+      "clusters_colors",
+      "day_colors",
+      "neighbors",
+      "pca",
+      "source_name"
+    ]
+  },
+  {
+    "name": "dentategyrus_benchmark",
+    "path": "F:/biotrade/LineaLinkR_benchmark_assets/data/dentategyrus_benchmark.h5ad",
+    "shape": [
+      2930,
+      13913
+    ],
+    "obs_columns": [
+      "age(days)",
+      "clusters",
+      "clusters_enlarged",
+      "index"
+    ],
+    "var_columns": "index",
+    "uns_keys": [
+      "clusters_colors",
+      "source_name"
+    ]
+  },
+  {
+    "name": "cellrank_stemnet_benchmark",
+    "path": "F:/biotrade/LineaLinkR_benchmark_assets/data/cellrank_stemnet_benchmark.h5ad",
+    "source_file": "F:/biotrade/LineaLinkR_benchmark_assets/benchmarks/cellrank2_reproducibility/data/benchmarking/stemnet/adata.h5ad",
+    "shape": [
+      2531,
+      3000
+    ],
+    "obs_columns": [
+      "G2M_score",
+      "S_score",
+      "clusters",
+      "clusters_coarse",
+      "clusters_fine",
+      "day",
+      "index",
+      "initial_size",
+      "initial_size_spliced",
+      "initial_size_unspliced",
+      "louvain_Alpha",
+      "louvain_Beta",
+      "n_counts",
+      "palantir_pseudotime",
+      "phase",
+      "proliferation"
+    ],
+    "var_columns": [
+      "dispersions",
+      "dispersions_norm",
+      "gene_count_corr",
+      "highly_variable",
+      "highly_variable_genes",
+      "index",
+      "means"
+    ],
+    "uns_keys": [
+      "clusters_colors",
+      "clusters_fine_colors",
+      "louvain_Alpha_colors",
+      "louvain_Beta_colors",
+      "pca",
+      "source_name"
+    ]
+  },
+  {
+    "name": "cellrank_bone_marrow_benchmark",
+    "path": "F:/biotrade/LineaLinkR_benchmark_assets/data/cellrank_bone_marrow_benchmark.h5ad",
+    "source_file": "https://ndownloader.figshare.com/files/35826944",
+    "shape": [
+      5780,
+      27876
+    ],
+    "obs_columns": [
+      "clusters",
+      "index",
+      "palantir_diff_potential",
+      "palantir_pseudotime"
+    ],
+    "var_columns": [
+      "index",
+      "palantir"
+    ],
+    "uns_keys": [
+      "clusters_colors",
+      "palantir_branch_probs_cell_types"
+    ]
+  },
+  {
+    "name": "cellagentchat_scc_processed_benchmark",
+    "path": "F:/biotrade/LineaLinkR_benchmark_assets/data/cellagentchat_scc_processed_benchmark.h5ad",
+    "source_file": "F:/biotrade/LineaLinkR_benchmark_assets/benchmarks/cellagentchat/scc_processed.h5ad.zip",
+    "shape": [
+      3295,
+      16746
+    ],
+    "obs_columns": [
+      "cell_type",
+      "n_genes",
+      "n_genes_by_counts",
+      "pct_counts_mt",
+      "pseudotime",
+      "total_counts",
+      "total_counts_mt",
+      "x",
+      "y"
+    ],
+    "var_columns": [
+      "mean_counts",
+      "mt",
+      "n_cells",
+      "n_cells_by_counts",
+      "pct_dropout_by_counts",
+      "total_counts"
+    ],
+    "uns_keys": [
+      "diffmap_evals",
+      "draw_graph",
+      "iroot",
+      "leiden",
+      "leiden_colors",
+      "leiden_sizes",
+      "neighbors",
+      "paga",
+      "pca",
+      "rank_genes_groups",
+      "source_name",
+      "umap"
+    ]
+  },
+  {
+    "name": "monocle3_worm_l2_benchmark",
+    "path": "F:/biotrade/LineaLinkR_benchmark_assets/data/monocle3_worm_l2_benchmark.h5ad",
+    "source_file": "F:/biotrade/LineaLinkR_benchmark_assets/benchmarks/monocle3_worm_l2/monocle3_worm_l2_matrix.csv.gz",
+    "shape": [
+      5340,
+      5000
+    ],
+    "obs_columns": [
+      "Size_Factor",
+      "cao_cell_type",
+      "cao_cluster",
+      "cao_tissue",
+      "plate"
+    ],
+    "var_columns": "gene_short_name",
+    "uns_keys": "source_name"
+  }
+]

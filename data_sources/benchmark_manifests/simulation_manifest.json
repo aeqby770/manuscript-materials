@@ -1,0 +1,137 @@
+[
+  {
+    "file": "simulated_complex_3branch.h5ad",
+    "n_cells": 2000,
+    "n_genes": 1000,
+    "n_branches": 4,
+    "dropout": 0.0,
+    "batch": "none",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_2br_500c.h5ad",
+    "n_cells": 500,
+    "n_genes": 1000,
+    "n_branches": 2,
+    "dropout": 0.0,
+    "batch": "False",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_2br_2000c.h5ad",
+    "n_cells": 2000,
+    "n_genes": 1000,
+    "n_branches": 2,
+    "dropout": 0.0,
+    "batch": "False",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_2br_5000c.h5ad",
+    "n_cells": 5000,
+    "n_genes": 1000,
+    "n_branches": 2,
+    "dropout": 0.0,
+    "batch": "False",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_3br_500c.h5ad",
+    "n_cells": 500,
+    "n_genes": 1000,
+    "n_branches": 3,
+    "dropout": 0.0,
+    "batch": "False",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_3br_2000c.h5ad",
+    "n_cells": 2000,
+    "n_genes": 1000,
+    "n_branches": 3,
+    "dropout": 0.0,
+    "batch": "False",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_3br_5000c.h5ad",
+    "n_cells": 5000,
+    "n_genes": 1000,
+    "n_branches": 3,
+    "dropout": 0.0,
+    "batch": "False",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_4br_500c.h5ad",
+    "n_cells": 500,
+    "n_genes": 1000,
+    "n_branches": 4,
+    "dropout": 0.0,
+    "batch": "False",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_4br_2000c.h5ad",
+    "n_cells": 2000,
+    "n_genes": 1000,
+    "n_branches": 4,
+    "dropout": 0.0,
+    "batch": "False",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_4br_5000c.h5ad",
+    "n_cells": 5000,
+    "n_genes": 1000,
+    "n_branches": 4,
+    "dropout": 0.0,
+    "batch": "False",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_3br_2000c_drop30.h5ad",
+    "n_cells": 2000,
+    "n_genes": 1000,
+    "n_branches": 3,
+    "dropout": 0.3,
+    "batch": "False",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_3br_2000c_drop50.h5ad",
+    "n_cells": 2000,
+    "n_genes": 1000,
+    "n_branches": 3,
+    "dropout": 0.5,
+    "batch": "False",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_3br_2000c_drop70.h5ad",
+    "n_cells": 2000,
+    "n_genes": 1000,
+    "n_branches": 3,
+    "dropout": 0.7,
+    "batch": "False",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_3br_2000c_drop90.h5ad",
+    "n_cells": 2000,
+    "n_genes": 1000,
+    "n_branches": 3,
+    "dropout": 0.9,
+    "batch": "False",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  },
+  {
+    "file": "sim_3br_2000c_batch.h5ad",
+    "n_cells": 2000,
+    "n_genes": 1000,
+    "n_branches": 3,
+    "dropout": 0.0,
+    "batch": "True",
+    "ground_truth": "true_pseudotime + true_branch + true_bifurcation_level"
+  }
+]
