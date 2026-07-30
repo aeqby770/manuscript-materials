@@ -257,7 +257,7 @@ Source accessions, original publications, persistent identifiers and official re
 
 ## Code availability
 
-Source code, benchmark scripts and the dataset registry will accompany the LineaLinkR v0.6.4 release. Protocol details are provided in the Supplementary Methods and Table S1. The software is released under the MIT license; the repository and archival Zenodo DOI will be inserted before submission: [AUTHOR PLACEHOLDER].
+The LineaLinkR v0.6.4 source package, benchmark scripts, dataset provenance records and tabular results are available at https://github.com/aeqby770/manuscript-materials. Protocol details are provided in the Supplementary Methods and Table S1. LineaLinkR is released under the MIT license.
 
 ## Supplementary material
 

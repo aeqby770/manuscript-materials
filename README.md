@@ -10,4 +10,4 @@ This directory contains the files prepared for manuscript submission.
 - `data_sources/`: dataset accessions, source publications, and provenance records.
 - `results/`: tabular analysis results.
 
-Raw expression matrices and other large serialized inputs are not included. Figure-generation and manuscript-building scripts are not included.
+Raw expression matrices are available from the source repositories listed in `data_sources/`.
