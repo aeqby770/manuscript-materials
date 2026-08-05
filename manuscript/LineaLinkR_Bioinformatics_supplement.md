@@ -1,7 +1,7 @@
 # Supplementary Material: LineaLinkR
 
 **Manuscript:** LineaLinkR: lineage-resolved temporal ligand–receptor mapping along branched single-cell trajectories  
-**Journal:** Briefings in Bioinformatics (Problem solving protocol)  
+**Journal:** Bioinformatics (Original Paper)  
 
 ---
 
@@ -9,7 +9,7 @@
 
 ### Benchmark input and direction protocol
 
-All algorithms receive the same library-normalized, `log1p` expression matrix and cell identifiers unless their documented interface requires another representation. Ground-truth order, stage and branch labels are withheld from model fitting. Adapter outputs retain the native cell subset; missing predictions are not imputed. Root choice, direction policy and returned-cell fraction are reported per dataset. Slingshot, SCORPIUS and root-free TSCAN longest-path outputs may be reversed only under the prespecified signed-Spearman rule; the signed value and flip flag remain available. LineaLinkR retains its blind direction. Branch metrics use only `simulated_branch`, `sim_2br_500c`, `sim_2br_2000c` and `sim_2br_5000c`, restricted to cells with `true_pseudotime ≥ 0.4`; the other 12 simulated datasets are ordering-only stress tests.
+All algorithms receive the same library-normalized, `log1p` expression matrix and cell identifiers unless their documented interface requires another representation. Ground-truth order, stage and branch labels are withheld from model fitting. Adapter outputs retain the native cell subset; missing predictions are not imputed. Root choice, direction policy and returned-cell fraction are reported per dataset. Slingshot, SCORPIUS and root-free TSCAN longest-path outputs may be reversed only under the fixed signed-Spearman rule; the signed value and flip flag remain available. LineaLinkR retains its blind direction. Branch metrics use only `simulated_branch`, `sim_2br_500c`, `sim_2br_2000c` and `sim_2br_5000c`, restricted to cells with `true_pseudotime ≥ 0.4`; the other 12 simulated datasets are ordering-only stress tests.
 
 ### Expression-only attractor endpoint selection
 
@@ -31,11 +31,13 @@ The module-level fork-evidence simulation supplies synthetic lineage×bin LR sco
 
 GSE216606 inference uses an annotation-free H5AD expression matrix and neutral cell identifiers. Day, clone, fate, author state and technical batch are joined after fitting. Clone concentration compares within-clone lineage-pair agreement with the global lineage-pair probability and uses clone bootstrap intervals. GSE274389 time and Wnt-recorder labels are likewise withheld until trajectory fitting is complete.
 
+For the TraSig comparison, LineaLinkR and TraSig scores are each reduced to one value per LR pair and joined by exact ligand–receptor identity within each dataset. Rank correlations and Top-10 and Top-20 overlaps use only pairs returned by both methods. For the TICCI comparison, exact cell identifiers are joined to independent temporal labels, and cells without finite values from both methods are excluded. Correlations retain their sign; RMSE is calculated after min–max scaling each pseudotime vector.
+
 For GSE143437, recorded injury day is used as the biological time axis after blind LineaLinkR pseudotime is compared with day. C3-C3AR1 expression scores are summarized by biological sample at days 0, 2, 5 and 7. GSE291091 uses two biological replicates per group; differential expression is estimated from pseudobulk counts within mesenchymal/FAP-like cells and broad mononuclear phagocytes, followed by Hallmark rank enrichment and sample-level composition summaries.
 
 For GSE132465, six fibroblast-macrophage expression axes are fixed before analysis. Ten matched normal-tumour patients form the paired inference set. Paired symmetric changes, Wilcoxon tests, Benjamini-Hochberg adjustment and patient-bootstrap intervals use patient as the unit. Tumour-only subtype fractions and expression proxies are summarized across 23 patients, with fine-subtype proxies restricted to patients meeting the minimum cell-count requirement.
 
-GSE210152 is analysed as a pooled Leiden-resolved dataset. Exact barcode joining to the processed plaque atlas supplies partial annotation without expression-based imputation. Temporal LR rankings are recomputed after prespecified cell restrictions and by patient or leave-one-patient-out subsets while retaining the pooled pseudotime and lineage weights. Runtime measurements use fresh processes and include input loading, preprocessing, graph construction, trajectory inference, static LR and temporal/fork scoring; optional taxonomy calibration is excluded. Process-tree peak RSS includes descendants.
+GSE210152 is analysed as a pooled Leiden-resolved dataset. Exact barcode joining to the processed plaque atlas supplies partial annotation without expression-based imputation. Temporal LR rankings are recomputed after defined cell restrictions and by patient or leave-one-patient-out subsets while retaining the pooled pseudotime and lineage weights. Runtime measurements use fresh processes and include input loading, preprocessing, graph construction, trajectory inference, static LR and temporal/fork scoring; optional taxonomy calibration is excluded. Process-tree peak RSS includes descendants.
 
 ---
 
@@ -116,7 +118,7 @@ The source register supplies the DOI or PMID, official repository URL and source
 | StaVia | 19 | 19 |
 | scTour | 19 | 19 |
 
-The 37-dataset registry contains 24 ordering datasets and 13 native-endpoint or application datasets. Table 1 uses the complete 19-dataset core; the five scale extensions are reported separately.
+The 37-dataset registry contains 24 ordering datasets and 13 native-endpoint or application datasets. Table 1 uses the complete 19-dataset core; the five scale extensions are listed outside this table.
 
 ---
 
@@ -267,7 +269,7 @@ Pancreas contains 3696 cells, 8 types and 5 inferred lineages. The three module 
 | Wnt | instructive | 31 | 13 | 0 | 0 | 213 | 0.121 |
 | Notch | feedback | 79 | 21 | 7 | 0 | 442 | 0.013 |
 
-The unit is one ligand–receptor pair × source × target × lineage trajectory after averaging role weights across structurally valid, expression-supported bins. The final column is agreement with the prespecified pathway timing class.
+The unit is one ligand–receptor pair × source × target × lineage trajectory after averaging role weights across structurally valid, expression-supported bins. The final column is agreement with the pathway timing class defined for the comparison.
 
 ---
 
@@ -286,7 +288,7 @@ The unit is one ligand–receptor pair × source × target × lineage trajectory
 | pancreas | 31 | 27 | 14 | 14 | 4 |
 | dentate gyrus | 26 | 24 | 20 | 20 | 2 |
 
-Temporal-only (operational): top-decile temporal candidates without CellChat support or top-decile LIANA support; a pair may still appear below the top decile in LIANA.
+Temporal-only: top-decile temporal candidates without CellChat support or top-decile LIANA support; a pair may still appear below the top decile in LIANA.
 
 ---
 
@@ -342,7 +344,7 @@ None of the six pairs has a positive receptor-minus-ligand peak difference in th
 
 ---
 
-### Supplementary Table S18. Patient-level colorectal-cancer validation of prespecified fibroblast–macrophage axes
+### Supplementary Table S18. Patient-level colorectal-cancer validation of fibroblast–macrophage axes
 
 The six axes were selected from an independent colorectal-cancer study before analysis of GSE132465. Expression proxies use patient as the inferential unit; receptor complexes use the minimum component expression. Ten patients have matched normal and tumour samples.
 
@@ -516,16 +518,44 @@ Feature definitions follow the primary method papers [35, 36, 38].
 
 | Method | Trajectory handling | Branch context | Repeated times | Native LR output | Lag/direction model | Bifurcation-relative role |
 |--------|---------------------|----------------|----------------|------------------|---------------------|---------------------------|
-| LineaLinkR | internal blind/user-root TI; lineage weights | source×target×lineage×bin | no | saturating bin-resolved LR activity | descriptive lag summary | five operational labels plus an auxiliary transition score; pancreas prior agreement in Tables S12 and S13 |
+| LineaLinkR | internal blind/user-root TI; lineage weights | source×target×lineage×bin | no | saturating bin-resolved LR activity | descriptive lag summary | five timing labels plus an auxiliary transition score; pancreas prior agreement in Tables S12 and S13 |
 | TICCI | internal Louvain/PAGA, scEntropy direction and fitted time | trajectory topology, not LR profiles | no | CCI-weighted neighbourhood graph for TI | no LR lag test | no |
 | TraSig | external trajectory; sliding windows on edges | yes | no; uses supplied pseudotime | LR profile dot products with permutation support | synchronous profile matching | no |
 | TimeTalk | reconstructed pseudotime plus temporal TF network | cell-type/pseudotime | yes for intended workflow | co-varying LR scores linked to TF activity | LR↔TF Granger direction and correlation filters | no; its forward/backward/feedback labels are LR–TF directions |
+
+### Supplementary Table S31. Direct LineaLinkR–TraSig temporal-LR concordance
+
+The comparison uses eight datasets with paired LineaLinkR 0.6.4 and TraSig outputs. Scores are aggregated to one value per ligand–receptor pair within each method and compared only for pairs returned by both methods. Top-k overlap is the fraction of the two ranked lists shared at k. TraSig P-value counts use the minimum path-level permutation P value per pair and are descriptive, not multiplicity-adjusted pair-level significance tests.
+
+| Dataset | Shared LR pairs | Spearman ρ | Kendall τ | Top-10 overlap | Top-20 overlap | TraSig pairs with min P < 0.05 | LLR Top-10 with min P < 0.05 |
+|---------|----------------:|------------:|-----------:|---------------:|---------------:|--------------------------------:|-----------------------------:|
+| human fetal liver organoid | 314 | 0.421 | 0.308 | 0.30 | 0.65 | 24 | 0.00 |
+| cellagentchat SCC | 234 | 0.699 | 0.546 | 0.70 | 0.70 | 184 | 0.80 |
+| human CD34 | 78 | 0.439 | 0.305 | 0.30 | 0.40 | 59 | 0.60 |
+| GSE243917 RA | 277 | 0.503 | 0.361 | 0.40 | 0.50 | 249 | 1.00 |
+| GSE210152 atherosclerosis | 117 | 0.405 | 0.300 | 0.50 | 0.40 | 14 | 0.10 |
+| GSE125527 IBD | 43 | 0.766 | 0.575 | 0.80 | 0.70 | 33 | 1.00 |
+| GSE132465 CRC | 251 | 0.619 | 0.452 | 0.60 | 0.55 | 194 | 0.80 |
+| GSE135893 IPF | 372 | 0.686 | 0.500 | 0.50 | 0.45 | 372 | 1.00 |
+| Mean |  | 0.567 | 0.418 | 0.513 | 0.544 |  | 0.500 |
+
+### Supplementary Table S32. Direct LineaLinkR–TICCI ordering comparison
+
+The comparison uses exact cell matches with finite LineaLinkR pseudotime, TICCI pseudotime and independent temporal labels. Correlations are signed. RMSE is calculated after min–max scaling each method's pseudotime within a dataset.
+
+| Dataset | Shared cells | LineaLinkR Spearman ρ | TICCI Spearman ρ | LineaLinkR Kendall τ | TICCI Kendall τ | LineaLinkR RMSE | TICCI RMSE |
+|---------|-------------:|----------------------:|-----------------:|---------------------:|----------------:|----------------:|-----------:|
+| Dentate gyrus | 2,896 | 0.362 | 0.216 | 0.296 | 0.176 | 0.656 | 0.650 |
+| Gastrulation erythroid | 9,815 | 0.238 | 0.888 | 0.200 | 0.752 | 0.577 | 0.435 |
+| Human fetal liver organoid | 22,874 | 0.247 | 0.677 | 0.180 | 0.541 | 0.366 | 0.434 |
+| Lung | 32,559 | -0.068 | 0.013 | -0.046 | 0.007 | 0.501 | 0.604 |
+| Mean |  | 0.195 | 0.449 | 0.157 | 0.369 | 0.525 | 0.531 |
 
 ## Supplementary Notes
 
 ### Supplementary Note 1. Benchmark eligibility
 
-Algorithm-dataset pairs are eligible when the required native inputs are available and the method returns a finite, cell-aligned endpoint. Ordering comparisons use common evaluated datasets; endpoint-only outputs are reported separately. Terminal-branch comparisons use the four two-terminal simulations listed in Table S1 and cells with reference pseudotime ≥0.4.
+Algorithm-dataset pairs are eligible when the required native inputs are available and the method returns a finite, cell-aligned endpoint. Ordering comparisons use common evaluated datasets; endpoint-only outputs are listed separately. Terminal-branch comparisons use the four two-terminal simulations listed in Table S1 and cells with reference pseudotime ≥0.4.
 
 ### Supplementary Note 2. Ablation design
 
@@ -533,7 +563,7 @@ The pancreas module ablation removes LR scoring, temporal binning and fork detec
 
 ### Supplementary Note 3. Main-figure scope
 
-Figure 1 presents the workflow; Figures 2–4 cover trajectory geometry and benchmark comparisons; Figures 5–6 show developmental applications; Figures 7–8 present external temporal, clonal, perturbational and patient-level evidence.
+Figure 1 presents the workflow; Figure 2 covers trajectory geometry and benchmark comparisons; Figure 3 summarizes temporal programs and orthogonal support; Figure 4 shows the matched developmental applications; Figure 5 presents external temporal, clonal, perturbational and patient-level evidence.
 
 ### Supplementary Note 4. Software versions and environment
 
@@ -606,7 +636,7 @@ Alt text: Paired ligand and receptor heatmap rows show context-matched profiles 
 
 **Supplementary Figure S10.** Fine-subtype CRC expression proxies across 23 tumour patients. Values are within-axis z scores for SPP1-positive myeloid-to-myofibroblast or reverse-direction expression proxies; grey cells have fewer than five cells in either subtype.
 
-Alt text: Heatmap of six prespecified LR expression proxies across tumour patients, with missing cells explicitly shown when either author-defined subtype is sparse.
+Alt text: Heatmap of six LR expression proxies across tumour patients, with missing cells explicitly shown when either author-defined subtype is sparse.
 
 **Supplementary Figure S11.** Orthogonal dynamic-axis validation with axes withheld from LineaLinkR inference. Pancreas stochastic scVelo pseudotime is shown on UMAP and against blind LineaLinkR pseudotime; gastrulation boxplots compare blind-root and user-root pseudotime against embryo sampling stage.
 
@@ -620,7 +650,7 @@ Alt text: Three horizontal panels compare repeated total wallclock, stage compos
 
 Alt text: Dot plot of five transferred macrophage categories in four samples. Depleted samples have a larger mixed mono/macrophage fraction and generally smaller pro- and anti-inflammatory fractions than controls, showing that broad-compartment pathway contrasts are composition-sensitive.
 
-**Supplementary Figure S14.** GSE210152 atherosclerosis temporal programs ranked by mean temporal score. Point area gives the number of source–target contexts and colour denotes communication family. Outputs remain Leiden-resolved; exact-barcode plaque-atlas context is reported separately in Supplementary Figure S16.
+**Supplementary Figure S14.** GSE210152 atherosclerosis temporal programs ranked by mean temporal score. Point area gives the number of source–target contexts and colour denotes communication family. Outputs remain Leiden-resolved; exact-barcode plaque-atlas context is provided in Supplementary Figure S16.
 
 Alt text: Lollipop plot ranking 15 temporal ligand–receptor pairs, with source–target context count encoded by point area and communication family by colour.
 
