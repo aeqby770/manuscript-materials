@@ -1,0 +1,18 @@
+Unit,Method,Rank
+Pair / 420,"LineaLinkR (G amplitude, Q layout)",3
+Pair / 420,"G layout, Q shape",5
+Pair / 420,"G amplitude, G layout",6
+Pair / 420,"G local, Q late amplitude",3
+Pair / 420,TimeTalk (BMDC-wide MRA),126
+Pair / 420,TraSig-style paired dot,82
+Pair / 420,Peak mean product,80
+Pair / 420,Pooled mean product,83
+Ligand / 138,ENTRAIN,1
+Ligand / 138,"LineaLinkR (G amplitude, Q layout)",3
+Ligand / 138,"G layout, Q shape",5
+Ligand / 138,"G amplitude, G layout",6
+Ligand / 138,"G local, Q late amplitude",3
+Ligand / 138,TimeTalk (BMDC-wide MRA),70
+Ligand / 138,TraSig-style paired dot,39
+Ligand / 138,Peak mean product,38
+Ligand / 138,Pooled mean product,38

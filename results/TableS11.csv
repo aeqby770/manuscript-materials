@@ -1,0 +1,9 @@
+Rule,Scored of 75,K=10,K=20
+Full / peak,65,-0.0048,-0.0096
+Full / population,65,-0.0048,-0.0096
+Matched score control / peak,0,Below K,Below K
+Matched score control / population,0,Below K,Below K
+ENTRAIN,75,0.0413,0.0335
+Matched focal / population,65,-0.0060,-0.0079
+TimeTalk,75,0.0028,0.0011
+NicheNet / native Pearson,67,0.0226,0.0219

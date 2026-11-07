@@ -1,2 +1,0 @@
-dataset,n_matched_patients,n_prespecified_axes,n_axes_q_bh_lt_0_05,matched_patient_expression,temporal_validation,spatial_adjacency_validation,causal_validation,interpretation
-GSE132465,10,6,6,True,False,False,False,"matched-patient expression reproduction; pooled LineaLinkR support is reported separately and does not establish progression, spatial contact, or causality"

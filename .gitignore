@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.o
+*.so
+*.dll
+*.Rcheck/
+.Rhistory
+.RData
+source/LineaLinkR/src/target/
+cache/
+tmp/
+writing/
+manuscript/
+submission/
+build/
+*.docx
+*.pdf

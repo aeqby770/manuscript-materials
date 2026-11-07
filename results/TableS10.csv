@@ -1,0 +1,8 @@
+Rule,Scored of 102,K=10,K=20
+Full / peak,84,0.0010,-0.0020
+Full / population,84,0.0010,-0.0020
+Matched score control / peak,0,Below K,Below K
+Matched score control / population,0,Below K,Below K
+Matched focal / population,84,-0.0002,-0.0021
+TimeTalk,102,0.0029,-0.0047
+NicheNet / native Pearson,77,0.0273,0.0262

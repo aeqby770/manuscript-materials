@@ -1,9 +1,0 @@
-{
-  "content_contract": "liana_rank_aggregate_native_v1",
-  "dataset": "dentategyrus",
-  "canonical_source_path": "F:\\biotrade\\LineaLinkR_benchmark_assets\\01_datasets\\curated\\dentategyrus_benchmark.h5ad",
-  "n_cells": 2930,
-  "n_genes": 13913,
-  "groupby": "clusters",
-  "resource": "mouseconsensus"
-}

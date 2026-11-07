@@ -1,0 +1,64 @@
+CONFIG<-list(root=commandArgs(TRUE)[1L],dataset="gastrulation_erythroid",threads=as.integer(Sys.getenv("LLR_NATIVE_THREADS",parallel::detectCores())),seed=12345L,min_size=5L,max_size=200L,n_pcs=3L)
+Sys.setenv(OMP_NUM_THREADS=CONFIG$threads,OPENBLAS_NUM_THREADS=CONFIG$threads,MKL_NUM_THREADS=CONFIG$threads)
+.libPaths(c(file.path(CONFIG$root,"library"),.libPaths()))
+library(Matrix);library(data.table);library(rhdf5);library(Tempora);library(GSVA);library(msigdbr)
+setDTthreads(CONFIG$threads)
+set.seed(CONFIG$seed)
+out<-file.path(CONFIG$root,"results/by_algorithm/Tempora",CONFIG$dataset)
+dir.create(out,recursive=TRUE,showWarnings=FALSE)
+input<-file.path(CONFIG$root,"inputs/benchmark/literature_benchmarks/gastrulation_erythroid/gastrulation_erythroid.h5ad")
+shape<-h5readAttributes(input,"X")$shape
+expr<-sparseMatrix(i=as.integer(as.vector(h5read(input,"X/indices"))),
+ p=as.integer(as.vector(h5read(input,"X/indptr"))),x=as.numeric(as.vector(h5read(input,"X/data"))),dims=as.integer(rev(shape)),index1=FALSE)
+genes<-as.vector(h5read(input,paste0("var/",h5readAttributes(input,"var")$`_index`)))
+cells<-as.vector(h5read(input,paste0("obs/",h5readAttributes(input,"obs")$`_index`)))
+dimnames(expr)<-list(genes,cells)
+meta<-fread(file.path(CONFIG$root,"inputs/comparison/recovered_native/input_metadata/gastrulation_erythroid/meta.csv"))
+meta<-meta[match(cells,cell_id)]
+stopifnot(identical(meta$cell_id,cells),!anyNA(meta$stage),!anyNA(meta$celltype))
+started<-proc.time()[["elapsed"]]
+expr<-expr%*%Diagonal(x=10000/Matrix::colSums(expr))
+expr@x<-log1p(expr@x)
+dimnames(expr)<-list(genes,cells)
+clusters<-factor(meta$celltype)
+time_values<-unique(meta$stage)
+time_order<-time_values[order(as.numeric(gsub("[^0-9.]+","",time_values)))]
+metadata<-data.frame(Timepoints=meta$stage,Clusters=as.integer(clusters),row.names=cells)
+design<-sparse.model.matrix(~clusters+0)
+design<-design%*%Diagonal(x=1/colSums(design))
+cluster_expression<-as.matrix(expr%*%design)
+colnames(cluster_expression)<-seq_len(nlevels(clusters))
+rownames(cluster_expression)<-genes
+sets<-switch(as.character(file.exists(file.path(out,"native_hallmark_gene_sets.rds"))),
+ "TRUE"=readRDS(file.path(out,"native_hallmark_gene_sets.rds")),
+ "FALSE"={
+  table<-msigdbr(db_species="MM",species="Mus musculus",collection="MH")
+  value<-list(gene_sets=split(table$gene_symbol,table$gs_name),database_versions=unique(table$db_version))
+  saveRDS(value,file.path(out,"native_hallmark_gene_sets.rds"))
+  value
+ })
+cat("TEMPORA_STAGE full_native_cluster_pathway_profiles",ncol(expr),nrow(expr),nlevels(clusters),"\n");flush.console()
+parameter<-GSVA::gsvaParam(cluster_expression,sets$gene_sets,minSize=CONFIG$min_size,maxSize=CONFIG$max_size,kcdf="Gaussian",verbose=FALSE)
+pathways<-GSVA::gsva(parameter,verbose=FALSE,BPPARAM=BiocParallel::SerialParam(progressbar=FALSE))
+stopifnot(identical(colnames(expr),rownames(metadata)))
+object<-Tempora::CreateTemporaObject(as.matrix(expr),metadata,time_order)
+object@cluster.pathways<-pathways
+object@cluster.pathways.dr<-prcomp(t(pathways),scale=TRUE,center=TRUE)
+object<-Tempora::BuildTrajectory(object,n_pcs=min(CONFIG$n_pcs,ncol(object@cluster.pathways.dr$rotation)))
+saveRDS(object,file.path(out,"tempora_result.rds"))
+fwrite(as.data.table(object@trajectory),file.path(out,"tempora_trajectory_edges.csv"))
+fwrite(as.data.table(object@cluster.metadata,keep.rownames="cluster_id"),file.path(out,"tempora_cluster_metadata.csv"))
+fwrite(data.table(cluster_id=seq_along(levels(clusters)),cluster_label=levels(clusters)),file.path(out,"tempora_cluster_map.csv"))
+fwrite(as.data.table(object@cluster.pathways,keep.rownames="pathway"),file.path(out,"tempora_pathway_scores.csv"))
+fwrite(data.table(dataset=CONFIG$dataset,method="Tempora",task="known_time_cluster_pathway_trajectory",
+ n_input_cells=ncol(expr),n_input_genes=nrow(expr),n_native_clusters=nlevels(clusters),
+ n_observed_timepoints=length(time_order),n_native_pathways=nrow(pathways),n_native_edges=nrow(object@trajectory),
+ n_pcs=object@n.pcs,seed=CONFIG$seed,clock_source="observed_collection_stage",
+ gene_set_input="original_adaptor_Mouse_Hallmark_panel",gene_set_database_version=paste(sets$database_versions,collapse=";"),
+ gsva_minSize=CONFIG$min_size,gsva_maxSize=CONFIG$max_size,gsva_kcdf="Gaussian",
+ native_seconds=proc.time()[["elapsed"]]-started,result_status="completed_native_cluster_pathway_trajectory",
+ independent_graph_accuracy_truth_available=FALSE),file.path(out,"coverage.csv"))
+check<-readRDS(file.path(out,"tempora_result.rds"))
+stopifnot(identical(colnames(check@data),cells),identical(rownames(check@data),genes),
+ identical(check@trajectory,object@trajectory),nrow(check@meta.data)==length(cells))
+cat("TEMPORA_FULL_NATIVE_COMPLETE",length(cells),length(genes),nrow(pathways),nrow(object@trajectory),"\n")

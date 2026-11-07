@@ -1,4 +1,0 @@
-dataset,independent_axis,llr_protocol,n_cells,spearman,kendall,axis_used_by_llr,interpretation
-pancreas,scVelo stochastic velocity pseudotime,blind root,3696,0.9362028906515772,0.7788352385371646,False,orthogonal dynamic-axis concordance; not lineage tracing or causal validation
-gastrulation_erythroid,withheld embryo sampling stage E7.0-E8.5,blind root,9815,0.23818217598258035,0.20020952179928667,False,signed validation of the preregistered blind-root output
-gastrulation_erythroid,withheld embryo sampling stage E7.0-E8.5,user root sensitivity,9815,0.8490299277972007,0.7075285530771075,False,root-specified sensitivity; not the blind headline protocol

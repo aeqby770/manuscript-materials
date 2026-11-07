@@ -1,0 +1,8 @@
+Model,Pair AUPRC,Budget / 42,Null positive / 33,Scored of 102,Muscle K10,Muscle K20
+"G amplitude, G layout",0.72344,33/42,14/33,84,0.00103,-0.00197
+G restricted to observed paths,0.67951,28/42,14/33,85,0.00103,-0.00197
+Uniform observed-path weights,0.62176,28/42,13/33,85,0.00103,-0.00197
+"Q point weights, G layout",0.63907,28/42,14/33,85,0.00103,-0.00197
+"G local, Q late amplitude",0.63542,28/42,13/33,84,0.00103,-0.00197
+"G layout, Q shape",0.72344,33/42,14/33,84,0.00103,-0.00197
+"G amplitude, Q layout",0.64166,29/42,13/33,84,0.00103,-0.00197

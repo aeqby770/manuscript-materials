@@ -1,2 +1,0 @@
-dataset,benchmark_protocol,result_revision,n_cells,n_genes,n_types,n_lineages,n_lr_pairs,n_temporal_rows,n_temporal_pairs,mean_temporal_score,max_temporal_score
-GSE210152_athero,linealinkr064_submission,linealinkr064_terminal_leaf_endpoint,34456,36601,7,6,1363,221832,338,0.781262178581994,0.97312992811203

@@ -1,0 +1,91 @@
+# LineaLinkR · src/Makevars.win (Windows, GNU target)
+#
+# Builds the LineaLinkR Rust staticlib using x86_64-pc-windows-gnu, matching
+# Rtools 4.x (gcc).  This target is required because R on Windows links its
+# shared objects with the same MinGW-w64 toolchain; mixing with the MSVC
+# target produces an ABI mismatch.
+#
+# ── libgcc_eh.a handling ─────────────────────────────────────────────────
+# Rust's GNU windows target links `-lgcc_eh` to pull C++/Rust unwinding
+# runtime.  Two toolchain situations exist on Windows:
+#
+# (a) MSYS2 mingw-w64, winlibs, Rtools 4.5+:  unwinding is bundled into
+#     libgcc.a itself; the linker resolves `_Unwind_Resume`, etc., from
+#     libgcc.a directly.  No mock needed.  (BUILD_NOTES.md §3 options
+#     A/B/C — recommended.)
+#
+# (b) TDM-GCC 10.3 (legacy):  ships with neither libgcc_eh.a nor merged
+#     unwinding in libgcc.a, so `cannot find -lgcc_eh` blocks the link.
+#     A zero-byte libgcc_eh.a stub satisfies the `-l` lookup; the real
+#     unwinding symbols are then pulled from libgcc_s_seh-1.dll at link
+#     time.  Only enabled when the env-var LINEALINKR_NEED_LIBGCC_EH_MOCK
+#     is non-empty, so it does NOT poison toolchains in case (a) (where
+#     a hollow stub would shadow the real merged symbols and produce
+#     "undefined reference to `_Unwind_Resume`" link failures).
+
+TARGET     = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))-pc-windows-gnu
+TARGET_DIR = ../target
+LIBDIR     = $(TARGET_DIR)/$(TARGET)/release
+STATLIB    = $(LIBDIR)/liblinealinkr.a
+
+# Standard Windows system libraries required by Rust's std and by extendr.
+PKG_LIBS = $(STATLIB) \
+	-lws2_32 -ladvapi32 -luserenv -lbcrypt -lntdll \
+	-lpsapi -lole32 -loleaut32
+
+OBJECTS = entrypoint.o absorption_lu64.o state_clock.o
+
+all: $(SHLIB) rust_clean
+
+$(SHLIB): $(STATLIB)
+
+CARGO       ?= cargo
+LIBGCC_MOCK  = $(TARGET_DIR)/libgcc_mock
+
+# Intentionally NOT redirecting CARGO_HOME to a project-local directory.
+# A project-local CARGO_HOME (e.g. $(CURDIR)/.cargo) triggers
+# `failed to set mtime ... os error 87` on some Windows drive/filesystem
+# combinations when cargo unpacks crate tarballs (the SetFileTime() Win32
+# call rejects the mtime metadata format cargo writes from cross-volume
+# tar streams).  Using the user's global cargo cache
+# (%USERPROFILE%\.cargo) avoids the issue and also lets `cargo build`
+# reuse anything already compiled outside R CMD INSTALL.
+#
+# R CMD build/check installs from a temporary extracted source tree, so any
+# rustup directory override set on the original checkout no longer applies.
+# Force the GNU host toolchain explicitly here; otherwise cargo can fall back
+# to the default MSVC host toolchain for build scripts / proc-macros and fail
+# before the final x86_64-pc-windows-gnu target link step.
+
+.PHONY: $(STATLIB)
+
+$(STATLIB):
+	@CARGO_EXE="$(CARGO)"; \
+	if ! command -v "$$CARGO_EXE" >/dev/null 2>&1; then \
+		if [ -x "$$USERPROFILE/.cargo/bin/cargo.exe" ]; then \
+			CARGO_EXE="$$USERPROFILE/.cargo/bin/cargo.exe"; \
+		elif [ -x "$$HOME/.cargo/bin/cargo.exe" ]; then \
+			CARGO_EXE="$$HOME/.cargo/bin/cargo.exe"; \
+		else \
+			echo "ERROR: cargo not found. Install rustc + cargo (>=1.80) before R CMD INSTALL."; \
+			exit 1; \
+		fi; \
+	fi; \
+	if [ -n "$$LINEALINKR_NEED_LIBGCC_EH_MOCK" ]; then \
+		mkdir -p "$(LIBGCC_MOCK)" && : > "$(LIBGCC_MOCK)/libgcc_eh.a" && \
+		echo "[LineaLinkR] Using libgcc_eh.a mock at $(LIBGCC_MOCK) (TDM-GCC mode)"; \
+		LIBRARY_PATH="$$LIBRARY_PATH;$(CURDIR)/$(LIBGCC_MOCK)" \
+			"$$CARGO_EXE" rustc --lib --crate-type=staticlib \
+			--target=$(TARGET) --release --features extendr \
+			--manifest-path=../Cargo.toml --target-dir=$(TARGET_DIR); \
+	else \
+		"$$CARGO_EXE" rustc --lib --crate-type=staticlib \
+			--target=$(TARGET) --release --features extendr \
+			--manifest-path=../Cargo.toml --target-dir=$(TARGET_DIR); \
+	fi
+
+rust_clean: $(SHLIB)
+	@true
+
+clean:
+	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) $(TARGET_DIR)

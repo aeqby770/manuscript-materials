@@ -1,0 +1,23 @@
+CONFIG<-list(root=normalizePath(Sys.getenv("LLR_WORK_ROOT",getwd()),winslash="/",mustWork=TRUE),threads=parallel::detectCores(),
+ workspace=Sys.getenv("LLR_CALENDAR_INPUT_WS","cache/final065"),dataset="GSE143437_muscle_regeneration",
+ output=Sys.getenv("LLR_CALENDAR_OUT","results/evaluation/biology_final065"),ligand="Ccl2",receptor="Ccr2",
+ sender="FAPs",scope="Existing prespecified biological axis; development evidence")
+Sys.setenv(OMP_NUM_THREADS=CONFIG$threads)
+library(data.table)
+setDTthreads(CONFIG$threads)
+x<-readRDS(file.path(CONFIG$root,CONFIG$workspace,CONFIG$dataset,"linealinkr_complete.rds"))
+pmap<-as.data.table(x$pair_gene_map)[,.(pair_idx,ligand=ligand_genes,receptor=receptor_genes)]
+types<-unique(data.table(type=x$celltypes,label=x$celltype_labels))
+cal<-merge(as.data.table(x$calendar_fork_dynamics),pmap,by="pair_idx")
+cal<-merge(cal,types,by.x="target",by.y="type")
+setnames(cal,"label","receiver")
+cal<-merge(cal,types,by.x="source",by.y="type")
+setnames(cal,"label","sender")
+fixed<-cal[ligand==CONFIG$ligand&receptor==CONFIG$receptor&sender==CONFIG$sender]
+fields<-c("source","target","sender","receiver","unit_id","event_node","child","evaluable",
+ "theta","event_ranking_score","dynamic_status","dynamic_pattern","dynamic_time_start",
+ "dynamic_time_end","dynamic_change_time","dynamic_n_samples","focal_dynamic_status",
+ "focal_dynamic_pattern","focal_dynamic_change_time","focal_dynamic_n_samples")
+fixed<-fixed[,fields,with=FALSE]
+fwrite(fixed,file.path(CONFIG$root,CONFIG$output,"muscle_all_fixed_ccl2_calendar_events.csv"))
+print(fixed)

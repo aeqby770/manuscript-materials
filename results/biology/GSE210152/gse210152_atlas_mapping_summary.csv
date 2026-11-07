@@ -1,2 +1,0 @@
-local_cells,atlas_dib_cells,mapped_cells,mapping_fraction,n_local_leiden,n_level1_labels,n_level2_labels,annotation_source,boundary
-34456,25193,25193,0.7311643835616438,7,12,21,"Traeuble et al. 2025 plaque atlas, CELLxGENE dataset Dib; exact barcode join","unmapped local cells remain unlabeled; atlas labels are reference annotations, not original GEO obs fields"

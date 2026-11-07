@@ -1,3 +1,0 @@
-mapping_group,n_cells,basic_qc_pass_n,basic_qc_pass_fraction,n_counts_median,n_genes_median,pct_mt_median
-Atlas-mapped,25193,25181,0.9995236772119239,2841.0,978.0,2.6239066123962402
-Not in processed atlas,9263,3461,0.37363705063154484,551.0,267.0,6.849315166473389

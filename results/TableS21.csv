@@ -1,0 +1,10 @@
+Representation,Weights,Terminal RNA decoder
+G,Geometric reference,Own terminal weighted path map
+P,Support-preserving normalized max of G and Q,Own terminal weighted path map
+Q fixed,Local path assignments,Geometric-reference terminal map
+Q own,Local path assignments,Own terminal weighted path map
+Hard reference,Hard-reference assignment,Geometric-reference terminal map
+50 terminal neighbors,Distance weights in RNA PCA,Terminal labels of 50 nearest neighbors
+Input state,Model-input state identity,State-specific terminal distribution with context proportions for unavailable terminal states
+Proportion,Constant within context,Terminal context proportions
+Condition-prior adjustment,Native membership times condition/pooled prior ratio,Same terminal RNA decoder as the corresponding unadjusted arm

@@ -1,0 +1,7 @@
+Dataset,Full rho,Comparator,Comparator rho,Gap
+lung,-0.06407,monocle3,0.21238,-0.27645
+human fetal pancreas,0.11856,scTour,0.27529,-0.15673
+human fetal liver organoid,0.61623,SCORPIUS,0.76305,-0.14682
+zebrafish neural dev,0.20851,MultistageOT,0.33594,-0.12744
+gastrulation erythroid,0.81635,TICCI (SLICE),0.88801,-0.07165
+zebrafish tracerseq,0.79295,scFates,0.83756,-0.04461

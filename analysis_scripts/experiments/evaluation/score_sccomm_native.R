@@ -1,0 +1,50 @@
+WORK_ROOT<-normalizePath(Sys.getenv("LLR_WORK_ROOT",getwd()),winslash="/",mustWork=TRUE)
+CONFIG<-list(root=WORK_ROOT,dataset=commandArgs(TRUE)[1L],threads=parallel::detectCores(),
+ mode=Sys.getenv("SCCOMM_MODE","full"),seed=12345L,
+ source=file.path(WORK_ROOT,"tools/competitors/original/scComm/scComm.R"),
+ regulation=file.path(WORK_ROOT,"tools/competitors/original/scComm/data/regulation.rds"),
+ revision=file.path(WORK_ROOT,"tools/competitors/original/scComm/source_revision.json"),
+ cache=file.path(WORK_ROOT,"cache/final065"),
+ output=file.path(WORK_ROOT,"results/evaluation/final065/sccomm"))
+Sys.setenv(OMP_NUM_THREADS=CONFIG$threads,OPENBLAS_NUM_THREADS=CONFIG$threads,MKL_NUM_THREADS=CONFIG$threads)
+.libPaths(c(file.path(CONFIG$root,"library"),.libPaths()))
+library(data.table)
+library(Matrix)
+setDTthreads(CONFIG$threads)
+source(CONFIG$source,encoding="UTF-8")
+set.seed(CONFIG$seed)
+
+model<-readRDS(file.path(CONFIG$cache,CONFIG$dataset,"linealinkr_complete.rds"))
+extract_dir<-file.path(CONFIG$cache,CONFIG$dataset,"extract")
+genes<-fread(file.path(extract_dir,paste0(CONFIG$dataset,"_genes.txt")),header=FALSE)$V1
+cells<-fread(file.path(extract_dir,paste0(CONFIG$dataset,"_cells.txt")),header=FALSE)$V1
+counts<-readMM(file.path(extract_dir,paste0(CONFIG$dataset,"_matrix.mtx")))
+counts<-counts[,match(model$cells,cells),drop=FALSE]
+dimnames(counts)<-list(genes,model$cells)
+expression<-log1p(counts%*%Diagonal(x=10000/Matrix::colSums(counts)))
+dimnames(expression)<-dimnames(counts)
+annotations<-model$celltype_labels
+pairs<-unique(as.data.table(model$pair_gene_map)[,.(ligand=ligand_genes,receptor=receptor_genes)])
+output<-file.path(CONFIG$output,CONFIG$mode,CONFIG$dataset)
+dir.create(output,recursive=TRUE,showWarnings=FALSE)
+resource<-file.path(output,"common_lr_resource.tsv")
+fwrite(pairs,resource,sep="\t",col.names=FALSE)
+
+scCommInit(expression,annotations,lr_database=resource,tf_database=CONFIG$regulation)
+protocol<-data.table(dataset=CONFIG$dataset,method="scComm",mode=CONFIG$mode,
+ n_cells=ncol(expression),n_genes=nrow(expression),n_lr_pairs=nrow(lr_network),
+ n_measured_regulatory_edges=nrow(tfs),seed=CONFIG$seed,
+ commit=jsonlite::read_json(CONFIG$revision,simplifyVector=TRUE)$commit,
+ input_scale="log1p counts per 10000; same model cells and measured genes",
+ score_module="unmodified author CalcWeights and CalcCCI; directional group LRscore")
+fwrite(protocol,file.path(output,"protocol.csv"))
+print(protocol[,.(dataset,mode,n_cells,n_genes,n_lr_pairs,n_measured_regulatory_edges)])
+weights<-CalcWeights(expression,annotations,set_weight3=CONFIG$mode=="no_TF_activity")
+native<-CalcCCI(expression,annotations,weights)
+scores<-as.data.table(as.table(native$lrscore))
+setnames(scores,c("source_label","target_label","pair_key","score"))
+scores[,c("ligand","receptor"):=tstrsplit(as.character(pair_key),"---",fixed=TRUE)]
+scores[,c("dataset","method"):=list(CONFIG$dataset,paste0("scComm_",CONFIG$mode))]
+fwrite(scores,file.path(output,"native_pair_scores.csv"))
+saveRDS(list(weights=weights,ccires=native,protocol=protocol),file.path(output,"sccomm_native.rds"))
+cat("SCCOMM_SCORED",CONFIG$dataset,CONFIG$mode,nrow(scores),"\n")

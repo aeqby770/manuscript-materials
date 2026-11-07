@@ -1,2 +1,0 @@
-dataset,benchmark_protocol,result_revision,n_cells,n_genes,n_types,n_lineages,n_lr_pairs,n_temporal_rows,n_temporal_pairs,mean_temporal_score,max_temporal_score
-pancreas,linealinkr064_submission,linealinkr064_terminal_leaf_endpoint,3696,27998,8,5,3785,272340,345,0.475461021864177,0.915403366088867

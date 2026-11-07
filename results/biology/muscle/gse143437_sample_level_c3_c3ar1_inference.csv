@@ -1,2 +1,0 @@
-endpoint,n_samples,n_timepoints,anova_p,kruskal_p,evidence_scope
-FAP C3-C3ar1 to resident macrophages,10,4,0.0301450023373739,0.0967290843168882,sample-level expression score across recorded injury days

@@ -1,0 +1,7 @@
+Receiver,Fork,Child,Local Θ,Sustained Π,Event score,Paired samples,Late pairs
+FAPs,5,1,0.88809,0.87758,0.29255,3,1
+FAPs,5,8,-0.88730,-0.39556,-0.12373,2,1
+Resident Mac/APC,5,1,1.80788,1.05071,0.36171,2,0
+Resident Mac/APC,5,8,-1.80788,-0.75717,-0.25057,2,0
+FAPs,13,2,-0.10807,0.00000,0.00000,1,1
+FAPs,13,14,0.10807,0.00000,0.00000,1,1

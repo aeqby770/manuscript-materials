@@ -1,0 +1,13 @@
+Task,Method,AUPRC,Budget result
+Molecular pair,LineaLinkR,0.642,0.600
+Molecular pair,Matched score control,0.811,0.700
+Molecular pair,Persistence only,0.641,0.600
+Molecular pair,Geometric layout (G),0.723,0.650
+Molecular pair,Raw focal,0.530,0.433
+Molecular pair,Matched focal,0.468,0.417
+Molecular pair,Native TraSig,0.482,0.417
+Molecular pair,scComm (no TF),0.333,0.267
+Molecular pair,Pooled LR,0.432,0.383
+Branch event,LineaLinkR,0.654,29/42
+Branch event,TraSig projection,0.690,17/42
+Branch event,scComm projection,0.763,25/42

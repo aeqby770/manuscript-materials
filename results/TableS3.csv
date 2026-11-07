@@ -1,0 +1,13 @@
+Method,Definition,Planned,Reachable,Within K
+LineaLinkR,Focal label,42,42,29
+TraSig projection,Focal label,42,24,17
+scComm projection,Focal label,42,42,25
+LineaLinkR,Exact terminal sisters,42,14,10
+TraSig projection,Exact terminal sisters,42,8,8
+scComm projection,Exact terminal sisters,42,14,13
+LineaLinkR,Generating parent and daughters,42,0,0
+TraSig projection,Generating parent and daughters,42,0,0
+scComm projection,Generating parent and daughters,42,0,0
+LineaLinkR,Generating fork and time bracket,42,0,0
+TraSig projection,Generating fork and time bracket,42,0,0
+scComm projection,Generating fork and time bracket,42,0,0

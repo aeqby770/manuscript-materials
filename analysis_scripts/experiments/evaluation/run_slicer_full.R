@@ -1,0 +1,168 @@
+CONFIG<-list(root=commandArgs(TRUE)[1L],dataset=commandArgs(TRUE)[2L],threads=as.integer(Sys.getenv("LLR_NATIVE_THREADS",parallel::detectCores())),seed=12345L,kmin=5L,kmax=500L,kstep=5L,dimension=2L,equivalence_relative_tolerance=1e-6)
+Sys.setenv(OMP_NUM_THREADS=CONFIG$threads,OPENBLAS_NUM_THREADS=CONFIG$threads,MKL_NUM_THREADS=CONFIG$threads)
+.libPaths(c(file.path(CONFIG$root,"library"),.libPaths()))
+library(Matrix);library(data.table);library(SLICER);library(lle);library(MASS);library(reticulate)
+setDTthreads(CONFIG$threads)
+use_python("E:/Python/biotrade/Scripts/python.exe",required=TRUE)
+blas_np<-import("numpy",convert=FALSE);blas_la<-import("scipy.linalg",convert=FALSE)
+out<-file.path(CONFIG$root,"results/by_algorithm/SLICER",CONFIG$dataset)
+dir.create(out,recursive=TRUE,showWarnings=FALSE)
+pdf(NULL)
+set.seed(CONFIG$seed)
+a<-readRDS(file.path(CONFIG$root,"inputs/comparison/recovered_native/by_algorithm/CellChat",CONFIG$dataset,"cellchat.rds"))
+cells<-colnames(a@data);genes<-rownames(a@data)
+gene_var<-Matrix::rowMeans(a@data^2)-Matrix::rowMeans(a@data)^2
+keep<-which(is.finite(gene_var)&gene_var>1e-10)
+X<-t(as.matrix(a@data[keep,,drop=FALSE]))
+rm(a);gc()
+ctx<-new.env(parent=asNamespace("SLICER"))
+fn<-mget(c("select_genes","min_conn_k","adaptive_knn_graph","select_k","width_k","conn_knn_graph","find_extreme_cells","cell_order","process_distance"),asNamespace("SLICER"))
+invisible(list2env(lapply(fn,`environment<-`,value=ctx),envir=ctx))
+body(ctx$min_conn_k)<-parse(text=sub('mode = "undirected"','mode = "max"',paste(deparse(body(ctx$min_conn_k),width.cutoff=500L),collapse="\n"),fixed=TRUE))[[1L]]
+body(ctx$conn_knn_graph)<-parse(text=sub('mode = "undirected"','mode = "max"',paste(deparse(body(ctx$conn_knn_graph),width.cutoff=500L),collapse="\n"),fixed=TRUE))[[1L]]
+ctx$rank_cache_matrix<-NULL;ctx$rank_cache_order<-NULL
+body(ctx$adaptive_knn_graph)<-quote({
+ n<-nrow(traj_dist)
+ knn<-switch(as.character(identical(traj_dist,rank_cache_matrix)),
+  "TRUE"=rank_cache_order,"FALSE"={
+   value<-t(apply(traj_dist,1L,order))
+   rank_cache_matrix<<-traj_dist;rank_cache_order<<-value
+   value
+  })
+ kk<-max(k)
+ ij<-cbind(rep(seq_len(n),each=kk),as.vector(t(knn[,seq_len(kk)+1L,drop=FALSE])))
+ ij<-ij[rep(seq_len(kk),times=n)<=rep(k,each=kk),,drop=FALSE]
+ adj_mat<-matrix(0,n,n);adj_mat[ij]<-traj_dist[ij]
+ adj_mat
+})
+cat("SLICER_STAGE native_full_gene_selection\n");flush.console()
+selection<-switch(as.character(file.exists(file.path(out,"native_gene_selection.rds"))),
+ "TRUE"=readRDS(file.path(out,"native_gene_selection.rds")),
+ "FALSE"={
+  tt<-proc.time()[["elapsed"]]
+  selected<-ctx$select_genes(X)
+  value<-list(indices=selected,seconds=proc.time()[["elapsed"]]-tt)
+  saveRDS(value,file.path(out,"native_gene_selection.rds"))
+  value
+ })
+stopifnot(length(selection$indices)>=10L)
+Xsel<-X[,selection$indices,drop=FALSE]
+selected_genes<-colnames(Xsel)
+rm(X);gc()
+ll<-new.env(parent=asNamespace("lle"))
+ll$blas_np<-blas_np;ll$blas_la<-blas_la
+lf<-mget(c("lle","find_nn_k","find_weights","find_coords"),asNamespace("lle"))
+invisible(list2env(lapply(lf,`environment<-`,value=ll),envir=ll))
+ll$cache_X<-NULL;ll$cache_ranks<-NULL;ll$last_weights<-NULL
+nn<-as.list(body(ll$find_nn_k));nt<-vapply(nn,deparse1,character(1L))
+ni<-which(startsWith(nt,"nns <-"))
+stopifnot(length(ni)==3L)
+nn[[ni[1L]]]<-quote(nns<-switch(as.character(identical(X,cache_X)),
+ "TRUE"=cache_ranks,"FALSE"={
+  ranked<-t(apply(as.matrix(dist(X)),1L,rank))
+  cache_X<<-X;cache_ranks<<-ranked;ranked
+ }))
+nn[[ni[2L]]]<-quote(invisible(NULL))
+body(ll$find_nn_k)<-as.call(nn)
+gi<-MASS::ginv;environment(gi)<-ll
+body(gi)<-quote({
+ decomp<-py_to_r(blas_la$svd(r_to_py(X),full_matrices=FALSE,compute_uv=TRUE,lapack_driver="gesdd",check_finite=FALSE))
+ u<-decomp[[1L]];d<-as.vector(decomp[[2L]]);v<-t(decomp[[3L]])
+ positive<-d>max(tol*d[1L],0)
+ switch(as.character(any(positive)),
+  "TRUE"=py_to_r(blas_np$matmul(r_to_py(v[,positive,drop=FALSE]),
+   r_to_py(1/d[positive]*t(u[,positive,drop=FALSE])))),
+  "FALSE"=array(0,dim(X)[2:1]))
+})
+ll$ginv<-gi
+ww<-as.list(body(ll$find_weights));wt<-vapply(ww,deparse1,character(1L))
+wi<-grep("^for ",wt);stopifnot(length(wi)==1L)
+wl<-ww[[wi]];wb<-as.list(wl[[4L]]);bt<-vapply(wb,deparse1,character(1L))
+zi<-which(startsWith(bt,"Z <-"));stopifnot(length(zi)==2L)
+wb[[zi[1L]]]<-quote(Z<-unname(sweep(X[nns[i,],,drop=FALSE],2L,X[i,],"-")))
+wb[[zi[2L]]]<-quote(invisible(NULL))
+wb[[which(startsWith(bt,"G <- Z"))]]<-quote({
+ pyZ<-r_to_py(Z)
+ G<-py_to_r(blas_np$matmul(pyZ,blas_np$transpose(pyZ)))
+ rm(pyZ)
+})
+wb[[which(startsWith(bt,"e <- eigen"))]]<-quote(e<-rev(py_to_r(blas_la$eigvalsh(r_to_py(G),lower=TRUE,driver="evr",check_finite=FALSE))))
+wl[[4L]]<-as.call(wb);ww[[wi]]<-wl;body(ll$find_weights)<-as.call(ww)
+body(ll$find_coords)<-quote({
+ last_weights<<-wgts
+ centered<-Diagonal(N)-Matrix(wgts,sparse=TRUE)
+ M<-as.matrix(crossprod(centered))
+ decomp<-py_to_r(blas_la$eigh(r_to_py(M),lower=TRUE,eigvals_only=FALSE,driver="evr",check_finite=FALSE))
+ decomp[[2L]][,seq.int(m+1L,2L),drop=FALSE]*sqrt(N)
+})
+ctx$lle<-ll$lle
+ctx$width_history<-data.table(k=integer(),width=numeric())
+width_body<-as.list(body(ctx$width_k))
+width_body<-append(width_body,list(quote(width_history<<-rbind(width_history,data.table(k=k,width=areaahull(alpha_hull)/len)))),after=length(width_body)-1L)
+body(ctx$width_k)<-as.call(width_body)
+cat("SLICER_STAGE full_native_neighbourhood_kernel_equivalence\n");flush.console()
+kmax<-min(CONFIG$kmax,nrow(Xsel)-2L)
+nn_max<-ll$find_nn_k(Xsel,kmax)
+neighbours<-nn_max[1L,];kk<-sum(neighbours)
+Z0<-matrix(c(t(Xsel))-c(t(Xsel[1L,])),nrow=nrow(Xsel),byrow=TRUE)
+Z0<-matrix(Z0[neighbours,],ncol=ncol(Xsel),nrow=kk)
+Z1<-unname(sweep(Xsel[neighbours,,drop=FALSE],2L,Xsel[1L,],"-"))
+stopifnot(identical(Z0,Z1))
+t0<-proc.time()[["elapsed"]]
+G0<-Z0%*%t(Z0)
+alpha0<-ifelse(kk>ncol(Xsel),0.1^2/kk*sum(diag(G0)),0)
+G0<-G0+alpha0*diag(1,kk)
+w0<-as.numeric(MASS::ginv(G0)%*%rep(1,kk));w0<-w0/sum(w0)
+ref_seconds<-proc.time()[["elapsed"]]-t0
+t0<-proc.time()[["elapsed"]]
+pz<-r_to_py(Z1)
+G1<-py_to_r(blas_np$matmul(pz,blas_np$transpose(pz)))
+alpha1<-ifelse(kk>ncol(Xsel),0.1^2/kk*sum(diag(G1)),0)
+G1<-G1+alpha1*diag(1,kk)
+w1<-as.numeric(ll$ginv(G1)%*%rep(1,kk));w1<-w1/sum(w1)
+fast_seconds<-proc.time()[["elapsed"]]-t0
+weight_relative_error<-max(abs(w0-w1))/max(1,max(abs(w0)))
+stopifnot(is.finite(weight_relative_error),weight_relative_error<=CONFIG$equivalence_relative_tolerance)
+fwrite(data.table(dataset=CONFIG$dataset,n_full_input_cells=nrow(Xsel),n_selected_genes=ncol(Xsel),
+ verification_unit="first_native_complete_neighbourhood_at_declared_max_k",n_neighbours=kk,
+ centered_expression_identical=identical(Z0,Z1),normalized_weight_relative_error=weight_relative_error,
+ native_seconds=ref_seconds,threaded_seconds=fast_seconds,pseudoinverse_cutoff=sqrt(.Machine$double.eps)),
+ file.path(out,"native_kernel_equivalence.csv"))
+rm(Z0,Z1,G0,G1,nn_max,pz);gc()
+cat("SLICER_STAGE full_k_search",CONFIG$kmin,kmax,CONFIG$kstep,"\n");flush.console()
+started<-proc.time()[["elapsed"]]
+pilot<-ll$lle(Xsel,m=CONFIG$dimension,k=CONFIG$kmin)
+stopifnot(nrow(pilot$Y)==nrow(Xsel),all(is.finite(pilot$Y)))
+k<-ctx$select_k(Xsel,kmin=CONFIG$kmin,kmax=kmax,by=CONFIG$kstep)
+fwrite(ctx$width_history,file.path(out,"native_k_search.csv"))
+cat("SLICER_STAGE final_full_embedding",k,"\n");flush.console()
+fit<-ll$lle(Xsel,m=CONFIG$dimension,k=k)
+W<-ll$last_weights
+Yfast<-fit$Y
+Ynative<-lle:::find_coords(W,NULL,N=nrow(Xsel),n=ncol(Xsel),m=CONFIG$dimension)
+d0<-as.matrix(dist(Ynative));d1<-as.matrix(dist(Yfast))
+geometry_error<-max(abs(d0-d1))/max(1,max(d0))
+stopifnot(is.finite(geometry_error),geometry_error<=CONFIG$equivalence_relative_tolerance)
+cat("SLICER_STAGE native_final_cell_graph_and_order\n");flush.console()
+g<-ctx$conn_knn_graph(Ynative,k=5)
+ends<-ctx$find_extreme_cells(g,Ynative)
+start<-ends[1L]
+ordering<-ctx$cell_order(g,start)
+stopifnot(setequal(ordering,seq_len(nrow(Xsel))))
+geodesic<-as.numeric(ctx$process_distance(g,start))
+pt<-rep(NA_real_,nrow(Xsel));pt[ordering]<-seq(0,1,length.out=length(ordering))
+model<-list(embedding=Ynative,lle_weights=Matrix(W,sparse=TRUE),cell_graph=g,
+ extreme_cells=ends,root_index=start,root_cell_id=cells[start],native_order=ordering,native_geodesic=geodesic,
+ cells=cells,input_genes=genes,selected_genes=selected_genes,k=k,k_search=ctx$width_history,
+ coordinate_operator_relative_error=geometry_error,config=CONFIG,input_source="exact_saved_CellChat_lognorm_full_cell_and_gene_binding")
+saveRDS(model,file.path(out,"slicer_native_result.rds"))
+fwrite(data.table(cell_id=cells,pseudotime=pt,native_geodesic=geodesic),file.path(out,"slicer_pseudotime.csv"))
+fwrite(data.table(dataset=CONFIG$dataset,method="SLICER",task="cell_ordering",n_input_cells=length(cells),
+ n_input_genes=length(genes),n_nonconstant_genes=length(keep),n_native_genes=length(selected_genes),
+ n_finite_pseudotime=sum(is.finite(pt)),n_native_graph_edges=igraph::ecount(g),k_selected=k,
+ k_search_min=CONFIG$kmin,k_search_max=kmax,k_search_step=CONFIG$kstep,root_input_mode="native_first_extreme_cell;no_reference_orientation",
+ direction_policy="as_returned_no_truth_flip",native_seconds=selection$seconds+proc.time()[["elapsed"]]-started,
+ result_status="completed_native_full_input"),file.path(out,"coverage.csv"))
+check<-readRDS(file.path(out,"slicer_native_result.rds"))
+stopifnot(identical(check$cells,cells),identical(check$native_order,ordering),igraph::vcount(check$cell_graph)==length(cells))
+cat("SLICER_FULL_COMPLETE",length(cells),length(selected_genes),"k",k,"geometry_relative_error",geometry_error,"\n")

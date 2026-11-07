@@ -1,0 +1,522 @@
+CONFIG<-list(root=Sys.getenv("LLR_WORK_ROOT",normalizePath(getwd(),winslash="/",mustWork=TRUE)),threads=parallel::detectCores(),
+ dataset=Sys.getenv("LLR_CLONE_DATASET","larry_invitro"),
+ output=Sys.getenv("LLR_CLONE_OUT","results/evaluation/calendar_lineage_validation"),terminal_day=6,epsilon=1e-12,k=50L,
+ transition_graph=Sys.getenv("LLR_CLONE_TRANSITION_GRAPH","FALSE")=="TRUE",min_n_eff=5,
+ transport=Sys.getenv("LLR_CLONE_TRANSPORT","FALSE")=="TRUE",transport_iter=1000L,transport_tolerance=1e-8,
+ reuse_predictions=Sys.getenv("LLR_CLONE_REUSE",""),
+ context_prior=Sys.getenv("LLR_CLONE_CONTEXT_PRIOR","FALSE")=="TRUE",
+ priming_repair=Sys.getenv("LLR_CLONE_PRIMING_REPAIR","FALSE")=="TRUE",
+ count_residual=Sys.getenv("LLR_CLONE_COUNT_RESIDUAL","FALSE")=="TRUE",
+ local_reference=Sys.getenv("LLR_CLONE_LOCAL_REFERENCE","FALSE")=="TRUE",
+ supported_reference=Sys.getenv("LLR_CLONE_SUPPORTED_REFERENCE","FALSE")=="TRUE",
+ hellinger_reference=Sys.getenv("LLR_CLONE_HELLINGER_REFERENCE","FALSE")=="TRUE",
+ mixture_decoder=Sys.getenv("LLR_CLONE_MIXTURE_DECODER","FALSE")=="TRUE",
+ decoder_output_prefix="mixture_decoder_parameters",
+ decoder_source="development/lineage_decoder_candidates.R",
+ pooled_decoder=Sys.getenv("LLR_CLONE_POOLED_DECODER","FALSE")=="TRUE",
+ pooled_output_prefix="common_decoder_parameters",
+ primary_model="native_reference",secondary_model="native_priming",
+ models=c("native_reference","native_priming","hard_reference","terminal_context_prior","terminal_rna_knn","terminal_state_decoder"),
+ unit="Clone within experimental context and current sampling time",
+ measurement="Compare the mean predicted composition of currently assayed clonal members with independently observed future clonal composition; not an individual cell lineage truth",
+ fit_information="Per-cell memberships and terminal RNA mappings do not take clonal identities or clone outcomes as inputs. Clonal outcome comparisons selected the membership formulation. Every method receives the complete terminal RNA annotations.",
+ missing="Untraced cells and contexts without a terminal sample remain in coverage; no inferred labels are substituted",
+ specs=list(
+ larry_invitro=list(workspace=Sys.getenv("LLR_CLONE_WORKSPACE","cache/final065"),prefix="stateFate_inVitro",
+  context="Starting population",transpose=FALSE,query_mode="separate_cultures"),
+ larry_cytokine_perturbation=list(workspace=Sys.getenv("LLR_CLONE_WORKSPACE","cache/external_validation"),prefix="stateFate_cytokinePerturbation",
+  context="Cytokine condition",transpose=TRUE,query_mode="split_shared_baseline")))
+Sys.setenv(OMP_NUM_THREADS=CONFIG$threads)
+library(data.table)
+library(Matrix)
+setDTthreads(CONFIG$threads)
+spec<-CONFIG$specs[[CONFIG$dataset]]
+OUT<-file.path(CONFIG$root,CONFIG$output)
+dir.create(OUT,recursive=TRUE,showWarnings=FALSE)
+x<-readRDS(file.path(CONFIG$root,spec$workspace,CONFIG$dataset,"linealinkr_complete.rds"))
+meta<-fread(file.path(CONFIG$root,"inputs/external_validation/LARRY",
+ paste0(spec$prefix,"_metadata.txt.gz")),encoding="UTF-8")
+meta[,cell_id:=paste(Library,gsub("-","",get("Cell barcode"),fixed=TRUE),sep=":")]
+meta[,raw_row:=seq_len(.N)]
+meta[,context:=as.character(get(spec$context))]
+meta[,day:=as.numeric(get("Time point"))]
+meta[,fate:=as.character(get("Cell type annotation"))]
+clone<-as(readMM(gzfile(file.path(CONFIG$root,"inputs/external_validation/LARRY",
+ paste0(spec$prefix,"_clone_matrix.mtx.gz")))),"CsparseMatrix")
+clone<-switch(as.character(spec$transpose),"TRUE"=Matrix::t(clone),"FALSE"=clone)
+stopifnot(nrow(clone)==nrow(meta),all(Matrix::rowSums(clone)%in%c(0,1)),
+ all(clone@x==1),!anyDuplicated(meta$cell_id))
+members<-as.data.table(summary(clone))
+setnames(members,c("i","j","x"),c("raw_row","clone","membership"))
+trace<-merge(members,meta[,.(raw_row,context,day,fate)],by="raw_row")
+labels<-sort(unique(meta$fate))
+contexts<-sort(unique(meta$context))
+future<-trace[day==CONFIG$terminal_day,.(n=sum(membership)),by=.(context,clone,fate)]
+future[,context:=factor(context,levels=contexts)]
+future[,fate:=factor(fate,levels=labels)]
+truth<-dcast(future,context+clone~fate,value.var="n",fill=0,drop=FALSE)
+truth[,context:=as.character(context)]
+truth[,n_future_cells:=rowSums(.SD),.SDcols=labels]
+truth_matrix<-as.matrix(truth[,labels,with=FALSE])/pmax(truth$n_future_cells,1)
+truth[,labels]<-as.data.frame(truth_matrix)
+fitted<-meta[match(x$cells,cell_id),.(cell_id,raw_row,context,day,fate)]
+fitted[,index:=seq_len(.N)]
+stopifnot(identical(fitted$cell_id,x$cells),!anyNA(fitted$raw_row),
+ all(dim(x$lineage_weights)==dim(x$lineage_priming_weights)))
+early<-fitted[day<CONFIG$terminal_day,.(index,raw_row,cell_id,context,day)]
+queries<-switch(spec$query_mode,
+ separate_cultures=early,
+ split_shared_baseline=rbindlist(list(early[day>min(fitted$day)],
+  merge(early[day==min(fitted$day),!"context"][,join_key:=1L],
+   data.table(context=contexts,join_key=1L),by="join_key",
+   allow.cartesian=TRUE)[,!"join_key"]),use.names=TRUE))
+setorder(queries,day,context,index)
+queries[,query_id:=seq_len(.N)]
+embedding<-as.matrix(fread(file.path(x$knn_precompute_dir,"pca.csv"),header=FALSE))
+stopifnot(nrow(embedding)==length(x$cells))
+reference<-as.matrix(switch(as.character(is.null(x$lineage_reference_weights)),
+ "TRUE"=x$lineage_weights,"FALSE"=x$lineage_reference_weights))
+reference<-reference/rowSums(reference)
+priming<-as.matrix(x$lineage_priming_weights)/rowSums(x$lineage_priming_weights)
+assignment<-as.matrix(switch(as.character(is.null(x$lineage_assignment_weights)),
+ "TRUE"=x$lineage_priming_weights,"FALSE"=x$lineage_assignment_weights))
+assignment<-assignment/rowSums(assignment)
+CONFIG$priming_decoder<-switch(as.character(is.null(x$config_snapshot$lineage_priming_mode)),
+ "TRUE"="legacy_reference_decoder","FALSE"=x$config_snapshot$lineage_priming_mode)
+switch(as.character(!is.null(x$lineage_assignment_weights)),"TRUE"={
+ CONFIG$models<-union(CONFIG$models,"local_assignment")
+})
+hard<-outer(max.col(reference,ties.method="first"),seq_len(ncol(reference)),"==")*1
+switch(as.character(CONFIG$priming_repair),"TRUE"={
+ .libPaths(c(file.path(CONFIG$root,"library"),.libPaths()))
+ library(LineaLinkR)
+ CONFIG$models<-c(CONFIG$models,"continuous_priming","continuous_priming_gated","geometry_conditioned_priming","ungated_local_priming")
+ ungated<-ComputeLineageWeightsLocalBranchResidual(embedding,x$lineage_clusters,
+  x$lineage_paths,priming=FALSE)
+ continuous<-ComputeLineageWeightsLocalBranchResidual(embedding,x$lineage_clusters,
+  x$lineage_paths,priming=TRUE)
+ conditioned<-reference*continuous
+ conditioned<-conditioned/rowSums(conditioned)
+ gated<-continuous
+ root_rows<-x$lineage_clusters==x$lineage_paths[[1L]][1L]
+ first_children<-vapply(x$lineage_paths,"[",integer(1L),2L)
+ children<-sort(unique(first_children))
+ child_membership<-outer(first_children,children,"==")*1
+ child_index<-match(first_children,children)
+ reference_mass<-reference[root_rows,,drop=FALSE]%*%child_membership
+ continuous_mass<-continuous[root_rows,,drop=FALSE]%*%child_membership
+ gated[root_rows,]<-continuous[root_rows,,drop=FALSE]*
+  reference_mass[,child_index,drop=FALSE]/continuous_mass[,child_index,drop=FALSE]
+ stopifnot(all(is.finite(continuous)),all(is.finite(gated)),
+  max(abs(rowSums(continuous)-1))<1e-6,max(abs(rowSums(gated)-1))<1e-6)
+ CONFIG$priming_repair_scope<-"Same saved RNA geometry, tree, root and decoder; priming=TRUE removes assignment-mode descendant locks. Gated arm retains the existing root branch masses."
+ support<-data.table(context=fitted$context,day=fitted$day,
+  reference_nonzero=rowSums(reference>0),stored_nonzero=rowSums(priming>0),
+  continuous_nonzero=rowSums(continuous>0),gated_nonzero=rowSums(gated>0))
+ support<-support[,.(n_cells=.N,reference_single=sum(reference_nonzero==1L),
+  stored_single=sum(stored_nonzero==1L),continuous_single=sum(continuous_nonzero==1L),
+  gated_single=sum(gated_nonzero==1L)),by=.(context,day)]
+ fwrite(support,file.path(OUT,paste0(CONFIG$dataset,"_priming_support.csv")))
+})
+switch(as.character(CONFIG$count_residual),"TRUE"={
+ .libPaths(c(file.path(CONFIG$root,"library"),.libPaths()))
+ library(LineaLinkR)
+ source(file.path(CONFIG$root,"experiments/evaluation/lineage_count_residual.R"),encoding="UTF-8")
+ counts<-as(readMM(file.path(x$input_extract_dir,paste0(CONFIG$dataset,"_matrix.mtx"))),"CsparseMatrix")
+ rownames(counts)<-readLines(file.path(x$input_extract_dir,paste0(CONFIG$dataset,"_genes.txt")),encoding="UTF-8")
+ count_cells<-readLines(file.path(x$input_extract_dir,paste0(CONFIG$dataset,"_cells.txt")),encoding="UTF-8")
+ stopifnot(identical(count_cells,x$cells),ncol(counts)==length(x$cells))
+ count_priming<-ComputeLineageWeightsCountResidual(counts,x$lineage_clusters,x$lineage_paths)
+ count_gated<-count_priming
+ root_rows<-x$lineage_clusters==x$lineage_paths[[1L]][1L]
+ first_children<-vapply(x$lineage_paths,"[",integer(1L),2L)
+ children<-sort(unique(first_children))
+ child_membership<-outer(first_children,children,"==")*1
+ child_index<-match(first_children,children)
+ reference_mass<-reference[root_rows,,drop=FALSE]%*%child_membership
+ count_mass<-count_priming[root_rows,,drop=FALSE]%*%child_membership
+ count_gated[root_rows,]<-count_priming[root_rows,,drop=FALSE]*
+  reference_mass[,child_index,drop=FALSE]/count_mass[,child_index,drop=FALSE]
+ stopifnot(all(is.finite(count_priming)),all(is.finite(count_gated)),
+  max(abs(rowSums(count_priming)-1))<1e-6,max(abs(rowSums(count_gated)-1))<1e-6)
+ CONFIG$models<-c(CONFIG$models,"count_residual_priming","count_residual_priming_gated")
+ CONFIG$count_residual_scope<-"Complete within-state standardized RNA mean-contrast subspace; same cells, state labels, paths, reference decoder and clone scope; no outcome labels in the projection."
+})
+switch(as.character(CONFIG$supported_reference),"TRUE"={
+ .libPaths(c(file.path(CONFIG$root,"library"),.libPaths()))
+ supported<-LineaLinkR::CombineLineageMemberships(reference,assignment)
+ stopifnot(all(is.finite(supported)),max(abs(rowSums(supported)-1))<1e-6,
+  all(supported[reference>0]>0),all(supported+1e-7>=reference/2),
+  all(supported+1e-7>=assignment/2))
+ CONFIG$models<-union(CONFIG$models,c("supported_reference_fixed_decoder","supported_reference_decoder"))
+})
+switch(as.character(CONFIG$hellinger_reference),"TRUE"={
+ .libPaths(c(file.path(CONFIG$root,"library"),.libPaths()))
+ hellinger<-(sqrt(reference)+sqrt(assignment))^2
+ hellinger<-hellinger/rowSums(hellinger)
+ stopifnot(all(is.finite(hellinger)),max(abs(rowSums(hellinger)-1))<CONFIG$epsilon,
+  all(hellinger[reference>0]>0),all(hellinger+CONFIG$epsilon>=reference/4),
+  all(hellinger+CONFIG$epsilon>=assignment/4))
+ CONFIG$models<-union(CONFIG$models,c("hellinger_reference_fixed_decoder","hellinger_reference_decoder"))
+})
+onehot<-outer(fitted$fate,labels,"==")*1
+colnames(onehot)<-labels
+typehot<-outer(x$celltypes,sort(unique(x$celltypes)),"==")*1
+CONFIG$input_state_source<-x$celltype_column
+CONFIG$state_decoder<-"Same model-input state identity; terminal RNA labels define each state distribution within context. Unseen terminal states use the prespecified context prior, without clonal information."
+switch(as.character(CONFIG$transition_graph),"TRUE"={
+ CONFIG$models<-c(CONFIG$models,"calendar_knn_transition","calendar_degree_excess_transition","terminal_topology_state_decoder")
+ CONFIG$transition_input<-"Same complete RNA geometry, model states, observed collection dates and experimental context; no clonal labels."
+ CONFIG$transition_estimand<-"State-level future RNA composition conditional on observed graph reachability. These are not calibrated individual-cell fate probabilities."
+ graph_conn<-as(as(readMM(file.path(x$knn_precompute_dir,"knn_conn.mtx")),"generalMatrix"),"CsparseMatrix")
+ graph_t<-Matrix::t(graph_conn)
+ graph_conn<-(graph_conn+graph_t+abs(graph_conn-graph_t))/2
+ stopifnot(nrow(graph_conn)==length(x$cells))
+})
+switch(as.character(CONFIG$transport),"TRUE"={
+ stopifnot(CONFIG$transition_graph)
+ CONFIG$models<-c(CONFIG$models,"calendar_soft_kernel","calendar_balanced_transport")
+ CONFIG$transport_cost<-"Squared distances from individual source cells to next-date model-state PCA centroids"
+ CONFIG$transport_scale<-"Median positive squared cross-phase distance, fixed from RNA without clonal labels"
+ CONFIG$transport_marginals<-"Uniform assayed source cells and complete observed next-date state fractions within experimental context"
+})
+previous_predictions<-NULL
+switch(as.character(nzchar(CONFIG$reuse_predictions)),"TRUE"={
+ previous<-readRDS(CONFIG$reuse_predictions)
+ stopifnot(identical(previous$config$dataset,CONFIG$dataset),
+  identical(previous$config$specs[[CONFIG$dataset]]$workspace,spec$workspace),
+  identical(switch(as.character(is.null(previous$config$priming_decoder)),
+   "TRUE"="legacy_reference_decoder","FALSE"=previous$config$priming_decoder),
+   CONFIG$priming_decoder))
+ previous_predictions<-as.data.table(previous$predictions)
+ CONFIG$models<-union(CONFIG$models,unique(previous_predictions$model))
+})
+switch(as.character(CONFIG$context_prior),"TRUE"={
+ CONFIG$models<-c(CONFIG$models,"context_adjusted_reference")
+ CONFIG$context_prior_source<-"Terminal RNA branch fractions within each context divided by pooled terminal branch fractions; no clonal labels"
+ CONFIG$context_prior_reference<-"Saerens et al., Neural Computation 2002, doi:10.1162/089976602753284446; prior-shift diagnostic for uncalibrated geometric memberships"
+ terminal_branch_prior<-colMeans(reference[fitted$day==CONFIG$terminal_day,,drop=FALSE])
+})
+switch(as.character(CONFIG$local_reference),"TRUE"={
+ CONFIG$models<-union(CONFIG$models,"local_reference_decoder")
+})
+switch(as.character(CONFIG$mixture_decoder),"TRUE"={
+ .libPaths(c(file.path(CONFIG$root,"library"),.libPaths()))
+ mixture_methods<-new.env(parent=asNamespace("LineaLinkR"))
+ sys.source(file.path(CONFIG$root,CONFIG$decoder_source),envir=mixture_methods)
+ CONFIG$models<-union(CONFIG$models,c("mixture_reference","mixture_priming","mixture_assignment"))
+ CONFIG$mixture_decoder_fit<-"Fixed RNA memberships; categorical terminal-RNA mixture likelihood, EM from common terminal proportions; no clone outcomes in fitting"
+})
+switch(as.character(CONFIG$pooled_decoder),"TRUE"={
+ .libPaths(c(file.path(CONFIG$root,"library"),.libPaths()))
+ pooled_methods<-new.env(parent=asNamespace("LineaLinkR"))
+ sys.source(file.path(CONFIG$root,CONFIG$decoder_source),envir=pooled_methods)
+ pooled_terminal<-which(fitted$day==CONFIG$terminal_day)
+ pooled_fits<-data.table(view=c("reference","priming","assignment"))[,{
+  view_weights<-switch(.BY$view,reference=reference,priming=priming,assignment=assignment)
+  first<-pooled_methods$FitLineageOutcomeDecoder(
+   view_weights[pooled_terminal,,drop=FALSE],onehot[pooled_terminal,,drop=FALSE],max_iter=1L)
+  fit<-pooled_methods$FitLineageOutcomeDecoder(
+   view_weights[pooled_terminal,,drop=FALSE],onehot[pooled_terminal,,drop=FALSE])
+  .(average_decoder=list(first$decoder),mixture_fit=list(fit),
+   average_prediction=list(view_weights%*%first$decoder),
+   mixture_prediction=list(view_weights%*%fit$decoder),
+   iterations=fit$iterations,converged=fit$converged)
+ },by=view]
+ CONFIG$models<-union(CONFIG$models,c(paste0("pooled_average_",pooled_fits$view),
+  paste0("pooled_mixture_",pooled_fits$view)))
+ CONFIG$pooled_decoder_scope<-"One terminal-RNA mapping across all cytokine conditions; response differences arise from current memberships under the shared fate definition"
+ saveRDS(pooled_fits[,!c("average_prediction","mixture_prediction")],
+  file.path(OUT,paste0(CONFIG$dataset,"_",CONFIG$pooled_output_prefix,".rds")))
+ print(pooled_fits[,.(view,iterations,converged)])
+})
+
+terminal_contexts<-unique(fitted[day==CONFIG$terminal_day,context])
+predicted<-copy(previous_predictions)
+switch(as.character(length(setdiff(CONFIG$models,unique(previous_predictions$model)))>0L),"TRUE"={
+incremental<-queries[context%in%terminal_contexts,{
+ late<-which(fitted$day==CONFIG$terminal_day & fitted$context==.BY$context)
+ values<-list()
+ switch(as.character(nzchar(CONFIG$reuse_predictions)),"FALSE"={
+ decoder<-crossprod(reference[late,,drop=FALSE],onehot[late,,drop=FALSE])/
+  colSums(reference[late,,drop=FALSE])
+ colnames(decoder)<-labels
+ priming_decoder<-switch(CONFIG$priming_decoder,
+  geometric_local_envelope=crossprod(priming[late,,drop=FALSE],onehot[late,,drop=FALSE])/
+   colSums(priming[late,,drop=FALSE]),decoder)
+ colnames(priming_decoder)<-labels
+ type_count<-colSums(typehot[late,,drop=FALSE])
+ type_decoder<-crossprod(typehot[late,,drop=FALSE],onehot[late,,drop=FALSE])/pmax(type_count,1)
+ type_decoder<-type_decoder+outer(as.numeric(type_count==0),colMeans(onehot[late,,drop=FALSE]))
+ state_prediction<-typehot[index,,drop=FALSE]%*%type_decoder
+ colnames(state_prediction)<-labels
+ near<-RANN::nn2(data=embedding[late,,drop=FALSE],query=embedding[index,,drop=FALSE],k=CONFIG$k)
+ mass<-1/pmax(near$nn.dists,CONFIG$epsilon)
+ mass<-mass/rowSums(mass)
+ coupling<-sparseMatrix(i=rep(seq_len(.N),each=CONFIG$k),
+  j=as.vector(t(near$nn.idx)),x=as.vector(t(mass)),dims=c(.N,length(late)))
+ knn<-as.matrix(coupling%*%onehot[late,,drop=FALSE])
+ colnames(knn)<-labels
+ values<-list(native_reference=reference[index,,drop=FALSE]%*%decoder,
+  native_priming=priming[index,,drop=FALSE]%*%priming_decoder,
+  hard_reference=hard[index,,drop=FALSE]%*%decoder,
+  terminal_rna_knn=knn,
+  terminal_state_decoder=state_prediction,
+  terminal_context_prior=matrix(colMeans(onehot[late,,drop=FALSE]),
+   nrow=.N,ncol=length(labels),byrow=TRUE,dimnames=list(NULL,labels)))
+ })
+ switch(as.character(!is.null(x$lineage_assignment_weights)),"TRUE"={
+  assignment_decoder<-crossprod(reference[late,,drop=FALSE],onehot[late,,drop=FALSE])/
+   colSums(reference[late,,drop=FALSE])
+  colnames(assignment_decoder)<-labels
+  values<-c(values,list(local_assignment=assignment[index,,drop=FALSE]%*%assignment_decoder))
+ })
+ switch(as.character(CONFIG$pooled_decoder),"TRUE"={
+  common_values<-pooled_fits[,{
+   average<-average_prediction[[1L]][index,,drop=FALSE]
+   mixture<-mixture_prediction[[1L]][index,,drop=FALSE]
+   colnames(average)<-colnames(mixture)<-labels
+   .(model=c(paste0("pooled_average_",.BY$view),paste0("pooled_mixture_",.BY$view)),
+    prediction=list(average,mixture))
+  },by=view]
+  values<-c(values,setNames(common_values$prediction,common_values$model))
+ })
+
+ switch(as.character(CONFIG$mixture_decoder),"TRUE"={
+  context_name<-.BY$context
+  mixture_fits<-data.table(view=c("reference","priming","assignment"))[,{
+   view_weights<-switch(.BY$view,reference=reference,priming=priming,assignment=assignment)
+   fit<-mixture_methods$FitLineageOutcomeDecoder(
+    view_weights[late,,drop=FALSE],onehot[late,,drop=FALSE])
+   first<-mixture_methods$FitLineageOutcomeDecoder(
+    view_weights[late,,drop=FALSE],onehot[late,,drop=FALSE],max_iter=1L)
+   active<-colSums(view_weights[late,,drop=FALSE])>0
+   average<-crossprod(view_weights[late,,drop=FALSE],onehot[late,,drop=FALSE])/
+    pmax(colSums(view_weights[late,,drop=FALSE]),.Machine$double.eps)
+   first_error<-max(abs(first$decoder[active,,drop=FALSE]-average[active,,drop=FALSE]))
+   stopifnot(first_error<sqrt(.Machine$double.eps))
+   prediction<-view_weights[index,,drop=FALSE]%*%fit$decoder
+   colnames(prediction)<-labels
+   .(prediction=list(prediction),fit=list(fit),iterations=fit$iterations,converged=fit$converged,
+    max_change=fit$max_change,first_step_average_error=first_error,
+    terminal_log_likelihood_gain=fit$log_likelihood-first$log_likelihood)
+  },by=view]
+  print(mixture_fits[,.(context=context_name,view,iterations,converged,max_change,
+   first_step_average_error,terminal_log_likelihood_gain)])
+  saveRDS(list(condition=context_name,fits=mixture_fits[,!"prediction"]),
+   file.path(OUT,paste0(CONFIG$dataset,"_",CONFIG$decoder_output_prefix,"_",
+    match(context_name,contexts),".rds")))
+  values<-c(values,setNames(mixture_fits$prediction,paste0("mixture_",mixture_fits$view)))
+ })
+
+ switch(as.character(CONFIG$hellinger_reference),"TRUE"={
+  reference_decoder<-crossprod(reference[late,,drop=FALSE],onehot[late,,drop=FALSE])/
+   colSums(reference[late,,drop=FALSE])
+  hellinger_decoder<-crossprod(hellinger[late,,drop=FALSE],onehot[late,,drop=FALSE])/
+   colSums(hellinger[late,,drop=FALSE])
+  colnames(reference_decoder)<-colnames(hellinger_decoder)<-labels
+  values<-c(values,list(
+   hellinger_reference_fixed_decoder=hellinger[index,,drop=FALSE]%*%reference_decoder,
+   hellinger_reference_decoder=hellinger[index,,drop=FALSE]%*%hellinger_decoder))
+ })
+ switch(as.character(CONFIG$supported_reference),"TRUE"={
+  reference_decoder<-crossprod(reference[late,,drop=FALSE],onehot[late,,drop=FALSE])/
+   colSums(reference[late,,drop=FALSE])
+  supported_decoder<-crossprod(supported[late,,drop=FALSE],onehot[late,,drop=FALSE])/
+   colSums(supported[late,,drop=FALSE])
+  colnames(reference_decoder)<-colnames(supported_decoder)<-labels
+  values<-c(values,list(
+   supported_reference_fixed_decoder=supported[index,,drop=FALSE]%*%reference_decoder,
+   supported_reference_decoder=supported[index,,drop=FALSE]%*%supported_decoder))
+ })
+ switch(as.character(CONFIG$local_reference),"TRUE"={
+  local_decoder<-crossprod(assignment[late,,drop=FALSE],onehot[late,,drop=FALSE])/
+   colSums(assignment[late,,drop=FALSE])
+  colnames(local_decoder)<-labels
+  values<-c(values,list(local_reference_decoder=assignment[index,,drop=FALSE]%*%local_decoder))
+ })
+ switch(as.character(CONFIG$count_residual),"TRUE"={
+  decoder<-crossprod(reference[late,,drop=FALSE],onehot[late,,drop=FALSE])/
+   colSums(reference[late,,drop=FALSE])
+  colnames(decoder)<-labels
+  values<-c(values,list(count_residual_priming=count_priming[index,,drop=FALSE]%*%decoder,
+   count_residual_priming_gated=count_gated[index,,drop=FALSE]%*%decoder))
+ })
+ switch(as.character(CONFIG$priming_repair),"TRUE"={
+  decoder<-crossprod(reference[late,,drop=FALSE],onehot[late,,drop=FALSE])/
+   colSums(reference[late,,drop=FALSE])
+  colnames(decoder)<-labels
+  values<-c(values,list(continuous_priming=continuous[index,,drop=FALSE]%*%decoder,
+   continuous_priming_gated=gated[index,,drop=FALSE]%*%decoder,
+   geometry_conditioned_priming=conditioned[index,,drop=FALSE]%*%decoder,
+   ungated_local_priming=ungated[index,,drop=FALSE]%*%decoder))
+ })
+ switch(as.character(CONFIG$context_prior),"TRUE"={
+  branch_ratio<-colMeans(reference[late,,drop=FALSE])/terminal_branch_prior
+  conditional_reference<-sweep(reference[index,,drop=FALSE],2L,branch_ratio,"*")
+  conditional_reference<-conditional_reference/rowSums(conditional_reference)
+  conditional_decoder<-crossprod(reference[late,,drop=FALSE],onehot[late,,drop=FALSE])/
+   colSums(reference[late,,drop=FALSE])
+  colnames(conditional_decoder)<-labels
+  values<-c(values,list(context_adjusted_reference=conditional_reference%*%conditional_decoder))
+ })
+ switch(as.character(CONFIG$transition_graph),"TRUE"={
+  all_index<-sort(unique(c(index,late)))
+  cell_nodes<-data.table(index=all_index,day=fitted$day[all_index],state=x$lineage_clusters[all_index])
+  nodes<-unique(cell_nodes[,.(day,state)])[order(day,state)]
+  nodes[,node_id:=seq_len(.N)]
+  cell_nodes<-merge(cell_nodes,nodes,by=c("day","state"),sort=FALSE)
+  cell_nodes<-cell_nodes[match(all_index,index)]
+  H<-sparseMatrix(i=seq_along(all_index),j=cell_nodes$node_id,x=1,
+   dims=c(length(all_index),nrow(nodes)))
+  KH<-graph_conn[all_index,all_index,drop=FALSE]%*%H
+  edge_mass<-as.matrix(crossprod(H,KH))
+  boundary_sq<-as.matrix(crossprod(H,KH^2))
+  source_eff<-edge_mass^2/pmax(boundary_sq,CONFIG$epsilon)
+  target_eff<-edge_mass^2/pmax(t(boundary_sq),CONFIG$epsilon)
+  phases<-sort(unique(nodes$day))
+  adjacent<-outer(match(nodes$day,phases),match(nodes$day,phases),"-")== -1
+  calendar_mass<-edge_mass*adjacent
+  row_mass<-rowSums(calendar_mass)
+  col_mass<-colSums(calendar_mass)
+  phase_total<-rowsum(row_mass,group=nodes$day,reorder=TRUE)
+  expected<-outer(row_mass,col_mass)/pmax(phase_total[match(as.character(nodes$day),rownames(phase_total)),1],CONFIG$epsilon)
+  supported<-source_eff>=CONFIG$min_n_eff&target_eff>=CONFIG$min_n_eff
+  raw_mass<-calendar_mass*supported
+  excess_mass<-pmax(calendar_mass-expected,0)*supported
+  raw_transition<-raw_mass/pmax(rowSums(raw_mass),CONFIG$epsilon)
+  excess_transition<-excess_mass/pmax(rowSums(excess_mass),CONFIG$epsilon)
+  terminal_rows<-fitted$day[all_index]==CONFIG$terminal_day
+  terminal_mass<-as.numeric(crossprod(H,as.numeric(terminal_rows)))
+  terminal_decode<-as.matrix(crossprod(H,onehot[all_index,,drop=FALSE]*terminal_rows))/pmax(terminal_mass,1)
+  raw_future<-solve(diag(nrow(nodes))-raw_transition,terminal_decode)
+  excess_future<-solve(diag(nrow(nodes))-excess_transition,terminal_decode)
+  raw_reach<-rowSums(raw_future)
+  excess_reach<-rowSums(excess_future)
+  raw_future<-raw_future/pmax(raw_reach,CONFIG$epsilon)
+  excess_future<-excess_future/pmax(excess_reach,CONFIG$epsilon)
+  raw_future[raw_reach<=CONFIG$epsilon,]<-NA_real_
+  excess_future[excess_reach<=CONFIG$epsilon,]<-NA_real_
+  terminal_decode<-terminal_decode+outer(as.numeric(terminal_mass==0),colMeans(onehot[late,,drop=FALSE]))
+  colnames(raw_future)<-colnames(excess_future)<-colnames(terminal_decode)<-labels
+  query_node<-cell_nodes$node_id[match(index,all_index)]
+  values<-c(values,list(calendar_knn_transition=raw_future[query_node,,drop=FALSE],
+   calendar_degree_excess_transition=excess_future[query_node,,drop=FALSE],
+   terminal_topology_state_decoder=terminal_decode[query_node,,drop=FALSE]))
+ })
+ switch(as.character(CONFIG$transport),"TRUE"={
+  node_count<-as.numeric(colSums(H))
+  centroid<-as.matrix(crossprod(H,embedding[all_index,,drop=FALSE]))/node_count
+  phase_weights<-cell_nodes[day<CONFIG$terminal_day,{
+   source_position<-match(index,all_index)
+   next_day<-phases[match(.BY$day,phases)+1L]
+   target_nodes<-which(nodes$day==next_day)
+   source_embedding<-embedding[index,,drop=FALSE]
+   target_embedding<-centroid[target_nodes,,drop=FALSE]
+   cost<-pmax(outer(rowSums(source_embedding^2),rowSums(target_embedding^2))-
+    2*tcrossprod(source_embedding,target_embedding),0)
+   scale<-median(cost[cost>0])
+   kernel<-exp(-cost/scale)
+   source_fraction<-rep(1/.N,.N)
+   target_fraction<-node_count[target_nodes]/sum(node_count[target_nodes])
+   independent<-outer(source_fraction,target_fraction)
+   balanced<-stats::loglin(independent,margin=list(1L,2L),start=kernel,
+    fit=TRUE,param=FALSE,eps=CONFIG$epsilon,iter=CONFIG$transport_iter,print=FALSE)$fit
+   stopifnot(max(abs(rowSums(balanced)-source_fraction),
+    abs(colSums(balanced)-target_fraction))<CONFIG$transport_tolerance)
+   balanced<-balanced/source_fraction
+   unbalanced<-sweep(kernel,2L,target_fraction,"*")
+   unbalanced<-unbalanced/rowSums(unbalanced)
+   data.table(source_position=rep(source_position,times=length(target_nodes)),
+    target_node=rep(target_nodes,each=.N),
+    unbalanced=as.vector(unbalanced),balanced=as.vector(balanced))
+  },by=day]
+  U_raw<-sparseMatrix(i=phase_weights$source_position,j=phase_weights$target_node,
+   x=phase_weights$unbalanced,dims=c(length(all_index),nrow(nodes)))
+  U_balanced<-sparseMatrix(i=phase_weights$source_position,j=phase_weights$target_node,
+   x=phase_weights$balanced,dims=c(length(all_index),nrow(nodes)))
+  P_raw<-as.matrix(crossprod(H,U_raw))/node_count
+  P_balanced<-as.matrix(crossprod(H,U_balanced))/node_count
+  terminal_only<-as.matrix(crossprod(H,onehot[all_index,,drop=FALSE]*terminal_rows))/pmax(terminal_mass,1)
+  kernel_future<-as.matrix(U_raw%*%solve(diag(nrow(nodes))-P_raw,terminal_only))
+  transport_future<-as.matrix(U_balanced%*%solve(diag(nrow(nodes))-P_balanced,terminal_only))
+  colnames(kernel_future)<-colnames(transport_future)<-labels
+  take<-match(index,all_index)
+  stopifnot(max(abs(rowSums(kernel_future[take,,drop=FALSE])-1))<CONFIG$transport_tolerance,
+   max(abs(rowSums(transport_future[take,,drop=FALSE])-1))<CONFIG$transport_tolerance)
+  values<-c(values,list(calendar_soft_kernel=kernel_future[take,,drop=FALSE],
+   calendar_balanced_transport=transport_future[take,,drop=FALSE]))
+ })
+ result<-rbindlist(lapply(values,as.data.table),idcol="model",use.names=TRUE)
+ result[,query_id:=rep(query_id,length(values))]
+ result[,reachable_mass:=1]
+ switch(as.character(CONFIG$transition_graph),"TRUE"={
+  result[model=="calendar_knn_transition",reachable_mass:=raw_reach[query_node]]
+  result[model=="calendar_degree_excess_transition",reachable_mass:=excess_reach[query_node]]
+ })
+ result
+},by=context]
+ predicted<-rbindlist(list(previous_predictions,
+  incremental[!model%in%unique(previous_predictions$model)]),use.names=TRUE,fill=TRUE)
+})
+switch(as.character(CONFIG$context_prior),"TRUE"={
+ support_bounds<-queries[,{
+  last<-which(fitted$day==CONFIG$terminal_day&fitted$context==.BY$context)
+  support<-reference[index,,drop=FALSE]>0
+  target<-colMeans(reference[last,,drop=FALSE])
+  lower<-colMeans(support*(rowSums(support)==1L))
+  upper<-colMeans(support)
+  data.table(branch=seq_len(ncol(reference)),n_cells=.N,n_terminal=length(last),
+   target=target,lower=lower,upper=upper,
+   violation=pmax(0,lower-target,target-upper))
+ },by=.(context,day)]
+ fwrite(support_bounds,file.path(OUT,paste0(CONFIG$dataset,"_context_margin_support_bounds.csv")))
+})
+plan<-merge(CJ(model=CONFIG$models,query_id=queries$query_id),queries,by="query_id")
+plan<-merge(plan,predicted[,c("model","query_id","reachable_mass",labels),with=FALSE],
+ by=c("model","query_id"),all.x=TRUE)
+plan<-merge(plan,members[,.(raw_row,clone)],by="raw_row",all.x=TRUE)
+coverage<-plan[,.(n_cells=.N,n_traced=sum(!is.na(clone)),
+ n_predictable=sum(is.finite(get(labels[1L]))),mean_reachable_mass=mean(reachable_mass),
+ min_reachable_mass=min(reachable_mass)),by=.(model,context,day)]
+traced<-plan[!is.na(clone)]
+traced<-merge(traced,truth,by=c("context","clone"),all.x=TRUE,suffixes=c("","_truth"))
+p<-as.matrix(traced[,labels,with=FALSE])
+q<-as.matrix(traced[,paste0(labels,"_truth"),with=FALSE])
+traced[,cell_proxy_brier:=rowSums((p-q)^2)]
+traced[,cell_proxy_log_loss:=-rowSums(q*log(pmax(p,CONFIG$epsilon)))]
+composition<-traced[,lapply(.SD,mean),by=.(model,context,day,clone),.SDcols=labels]
+diagnostic<-traced[,.(n_current_cells=.N,cell_proxy_brier=mean(cell_proxy_brier),
+ cell_proxy_log_loss=mean(cell_proxy_log_loss)),by=.(model,context,day,clone)]
+composition<-merge(composition,diagnostic,by=c("model","context","day","clone"))
+composition<-merge(composition,truth,by=c("context","clone"),all.x=TRUE,suffixes=c("","_truth"))
+p<-as.matrix(composition[,labels,with=FALSE])
+q<-as.matrix(composition[,paste0(labels,"_truth"),with=FALSE])
+composition[,truth_available:=is.finite(n_future_cells)&n_future_cells>0]
+composition[,prediction_available:=rowSums(is.finite(p))==length(labels)&rowSums(p)>0]
+composition[,soft_brier:=rowSums((p-q)^2)]
+composition[,descendant_brier:=rowSums(p^2)-2*rowSums(p*q)+1]
+composition[,log_loss:=-rowSums(q*log(pmax(p,CONFIG$epsilon)))]
+composition[,within_clone_inflation:=cell_proxy_brier-soft_brier]
+composition[truth_available%in%FALSE,c("soft_brier","descendant_brier","log_loss","within_clone_inflation"):=list(NA_real_,NA_real_,NA_real_,NA_real_)]
+summary<-composition[,.(n_planned_clones=.N,n_truth_available=sum(truth_available),
+ n_scored=sum(truth_available&prediction_available),
+ soft_brier=mean(soft_brier[truth_available&prediction_available]),
+ descendant_brier=mean(descendant_brier[truth_available&prediction_available]),
+ log_loss=mean(log_loss[truth_available&prediction_available]),
+ mean_cell_proxy_inflation=mean(within_clone_inflation[truth_available&prediction_available])),
+ by=.(model,context,day)]
+common_scope<-composition[,.(common_prediction=all(prediction_available)),by=.(context,day,clone)]
+matched<-merge(composition,common_scope,by=c("context","day","clone"),all.x=TRUE)
+matched_summary<-matched[truth_available&common_prediction,.(n_clones=.N,
+ soft_brier=mean(soft_brier),descendant_brier=mean(descendant_brier),log_loss=mean(log_loss)),
+ by=.(model,context,day)]
+fwrite(matched_summary,file.path(OUT,paste0(CONFIG$dataset,"_matched_clone_composition_summary.csv")))
+saveRDS(list(config=CONFIG,coverage=coverage,predictions=predicted,truth=truth,
+ matched_summary=matched_summary,
+ clone_composition=composition,summary=summary),file.path(OUT,paste0(CONFIG$dataset,"_clone_composition.rds")))
+fwrite(summary,file.path(OUT,paste0(CONFIG$dataset,"_clone_composition_summary.csv")))
+fwrite(composition,file.path(OUT,paste0(CONFIG$dataset,"_all_clone_composition_scores.csv")))
+fwrite(coverage,file.path(OUT,paste0(CONFIG$dataset,"_clone_composition_coverage.csv")))
+cat("Dataset:",CONFIG$dataset,"root time:",fitted$day[x$start_cell],"input:",x$root_input_source,"\n")
+print(summary)

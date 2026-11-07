@@ -1,0 +1,14 @@
+Setting,Value,Use
+Count normalization,10000 per cell,LR expression scale
+Weighted expressing fraction,0.05,Sender and receiver support
+Kish effective count,5,Population and state-window support
+Endpoint potency-alignment gain,0.10,Initial root selector
+Cell-level ordering-score gain,0.10,Initial root selector
+Cell-level potency-alignment gain,0,Initial root selector
+Retained-variance fraction,0.75,Terminal-path continuation
+Child-window minimum cells,20,Branch IQR calibration
+Child-median gate,0.6 times reference IQR,Branch IQR calibration
+Branch scaling range,0.2 to 8,Branch IQR calibration
+Branch location shift,0,Branch IQR calibration
+Sister reference,Equal among supported sisters,Fixed within each sample across local and late windows
+Sample aggregation,Equal among paired samples,"Local, persistent and transient event score"

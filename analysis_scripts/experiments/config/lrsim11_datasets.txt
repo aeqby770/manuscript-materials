@@ -1,0 +1,11 @@
+lrsim_shared_trend
+lrsim_focal_branch
+lrsim_donor_confounded
+lrsim_dropout
+lrsim_nested_fork
+lrsim_sampling_thinning
+lrsim_transient_focal
+lrsim_donor_transient_focal
+lrsim_donor_ligand_only
+lrsim_donor_receptor_only
+lrsim_donor_nested_fork

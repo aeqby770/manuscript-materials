@@ -1,0 +1,31 @@
+[package]
+name = "linealinkr"
+version = "0.6.5"
+edition = "2021"
+
+# Three crate types:
+#   - staticlib : linked into R package (.a) via Makevars[.win], called from
+#                 R_init_LineaLinkR through extendr_module!()
+#   - cdylib    : optional .dll/.so for non-R FFI consumers (Python, etc.)
+#   - rlib      : Rust-side downstream crates + cargo test --lib
+[lib]
+path = "src/rust/lib.rs"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[dependencies]
+rayon = "1.8"
+rand = "0.8"
+
+# extendr R-FFI bridge. Gated behind a feature so that:
+#   * Rust-side `cargo test --lib` does not need extendr / R installed
+#   * R package build sets `--features extendr` via Makevars[.win]
+extendr-api = { version = "0.7", optional = true }
+
+[features]
+default = []
+extendr = ["dep:extendr-api"]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

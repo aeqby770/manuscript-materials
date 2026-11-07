@@ -1,7 +1,0 @@
-dataset,pair_name,pair_idx,ligand_genes,receptor_genes,source,target,source_label,target_label,lineage,peak_score_bin,peak_score
-dentategyrus,Mif_Ackr3,78,Mif,Ackr3,6,4,Granule immature,Endothelial,2,7,0.800920188426971
-dentategyrus,Ccl7_Ccr1,68,Ccl7,Ccr1,8,8,Microglia,Microglia,2,10,0.684042036533356
-pancreas,Iapp_Calcrl,493,Iapp,Calcrl,2,8,Beta,Pre-endocrine,5,10,0.804288983345032
-pancreas,Pyy_Npy1r,345,Pyy,Npy1r,1,8,Alpha,Pre-endocrine,4,11,0.802445113658905
-pancreas,Mdk_Lrp1,284,Mdk,Lrp1,4,7,Ductal,Ngn3 low EP,3,9,0.742432236671448
-pancreas,Pdgfa_Pdgfrb,109,Pdgfa,Pdgfrb,7,7,Ngn3 low EP,Ngn3 low EP,3,3,0.639920353889465

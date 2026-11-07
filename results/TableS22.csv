@@ -1,0 +1,8 @@
+Measurement,Stimulus,Lower h,Upper h
+Published paracrine window,LPS,0,1
+Prominent antiviral receiver state,WT time course,2,6
+Focal LR onset,LPS,0,1
+Focal LR onset,PIC,1,2
+Focal LR offset,LPS,4,6
+Focal LR offset,PIC,4,6
+Focal LR profile,PAM,0,6

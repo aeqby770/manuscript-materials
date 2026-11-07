@@ -1,0 +1,233 @@
+CONFIG<-list(root=normalizePath(Sys.getenv("LLR_WORK_ROOT",getwd()),winslash="/",mustWork=TRUE),threads=parallel::detectCores(),
+ dataset="GSE253000_ulipstic_mLN_unsorted",workspace=Sys.getenv("LLR_CONTACT_WORKSPACE","cache/final065"),
+ output=Sys.getenv("LLR_CONTACT_OUT","results/evaluation/calendar_lineage_validation"),min_n_eff=5,min_mass=5,
+ calendar_dynamics=Sys.getenv("LLR_CALENDAR_DYNAMICS_RDS",""),
+ reference_workspace=Sys.getenv("LLR_CONTACT_REFERENCE_WS",Sys.getenv("LLR_ANCHOR_WORKSPACE","")),
+ candidate_annotation="Cell-Cell Contact",query_budget=1L,
+ diagnostic_curves="ulipstic_selected_query_calendar_support.csv",
+ diagnostic_summary="ulipstic_selected_query_support_summary.csv",
+ diagnostic_expression="ulipstic_missed_peak_component_expression.csv",
+ assay="Independent biotin protein contact labeling; labeling donor is not a ligand-sender truth",
+ information="All RNA and experimental identity shared; biotin absent from model input",
+ query="Choose one molecular pair and direction per native fork using RNA alone; keep it fixed across children; evaluate both P14-partner directions",
+ unit="Six biological mice, two per observed time; fork children are correlated states, not independent mice",
+ temporal_truth="Strict replicate-separated middle peak: min(50h)>max(36h,96h); ambiguous profiles retained",
+ timing_resolution="Only 36,50,96h observed. A 50h middle peak is bracketed by 36-96h; no precise onset or zero-hour error claim",
+ scope="All children of RNA-native forks; missing contact/RNA calls retained; soluble LR is outside the primary contact-assay scope")
+Sys.setenv(OMP_NUM_THREADS=CONFIG$threads)
+library(data.table)
+library(Matrix)
+.libPaths(c(Sys.getenv("LLR_PACKAGE_LIBRARY",file.path(CONFIG$root,"library")),.libPaths()))
+library(LineaLinkR)
+setDTthreads(CONFIG$threads)
+OUT<-file.path(CONFIG$root,CONFIG$output)
+dir.create(OUT,recursive=TRUE,showWarnings=FALSE)
+x<-readRDS(file.path(CONFIG$root,CONFIG$workspace,CONFIG$dataset,"linealinkr_complete.rds"))
+switch(as.character(nzchar(CONFIG$calendar_dynamics)),"TRUE"={
+ x$calendar_fork_dynamics<-readRDS(CONFIG$calendar_dynamics)
+})
+reference<-switch(as.character(nzchar(CONFIG$reference_workspace)),
+ "TRUE"=readRDS(file.path(CONFIG$root,"cache",CONFIG$reference_workspace,CONFIG$dataset,"linealinkr_complete.rds")),
+ "FALSE"=x)
+stopifnot(identical(reference$cells,x$cells),
+ identical(reference$lineage_paths,x$lineage_paths),
+ identical(reference$celltypes,x$celltypes),
+ !is.null(reference$lineage_reference_weights) ||
+  is.null(reference$config_snapshot$lineage_weight_mode) ||
+  reference$config_snapshot$lineage_weight_mode=="reference_geometry")
+meta<-fread(file.path(x$input_extract_dir,paste0(CONFIG$dataset,"_meta.csv")),encoding="UTF-8")
+meta<-meta[,.(cell_id=barcode_id,sample_id,time_hours,cell_type)]
+meta<-meta[match(x$cells,cell_id)]
+labels<-fread(file.path(CONFIG$root,"inputs/external_validation/GSE253000/GSE253000_independent_contact_labels.csv"),encoding="UTF-8")
+labels[,contact_positive:=as.numeric(contact_positive%in%c(TRUE,"True","TRUE","1"))]
+meta<-merge(meta,labels[,.(cell_id,contact_positive,normalized_biotin)],by="cell_id",all.x=TRUE,sort=FALSE)
+meta<-meta[match(x$cells,cell_id)]
+stopifnot(identical(meta$cell_id,x$cells),!anyNA(meta$contact_positive),
+ uniqueN(meta$sample_id)==6L,identical(sort(unique(meta$time_hours)),c(36L,50L,96L)))
+fc<-as.data.table(x$fork_contrasts)
+ontology<-as.data.table(CellChat::CellChatDB.mouse$interaction)[,.(interaction_name,annotation)]
+pmap<-merge(as.data.table(x$pair_gene_map),unique(ontology),by="interaction_name",all.x=TRUE)
+stopifnot(!anyNA(pmap$annotation))
+children<-unique(fc[,.(event_node,child,child_descendants)])
+children[,child_index:=seq_len(.N)]
+tree<-data.table(lineage=rep(seq_along(x$lineage_paths),lengths(x$lineage_paths)),
+ node=unlist(x$lineage_paths),position=sequence(lengths(x$lineage_paths)))
+relations<-unique(merge(tree[,.(lineage,ancestor=node,start=position)],
+ tree[,.(lineage,node,end=position)],by="lineage",allow.cartesian=TRUE)[end>=start,.(ancestor,node)])
+membership<-merge(data.table(index=seq_along(x$cells),node=x$lineage_clusters),
+ relations,by="node",allow.cartesian=TRUE)
+membership<-merge(membership,children[,.(ancestor=child,child_index)],by="ancestor")
+W<-as.matrix(sparseMatrix(i=membership$index,j=membership$child_index,x=1,
+ dims=c(length(x$cells),nrow(children))))
+stopifnot(all(W%in%c(0,1)))
+colnames(W)<-as.character(children$child_index)
+weights<-as.data.table(W)
+weights[,index:=seq_len(.N)]
+weights<-melt(weights,id.vars="index",variable.name="child_index",value.name="weight",variable.factor=FALSE)
+weights[,child_index:=as.integer(child_index)]
+weights<-merge(weights,children[,.(child_index,event_node,child)],by="child_index")
+weights[,other_weight:=sum(weight)-weight,by=.(index,event_node)]
+weights<-merge(weights,meta[,.(index=seq_len(.N),sample_id,time_hours,cell_type,contact_positive,normalized_biotin)],by="index")
+gold<-weights[cell_type=="recipient",.(
+ focal_mass=sum(weight),other_mass=sum(other_weight),
+ focal_n_eff=sum(weight)^2/sum(weight^2),other_n_eff=sum(other_weight)^2/sum(other_weight^2),
+ contact_focal=sum(weight*contact_positive)/sum(weight),
+ contact_other=sum(other_weight*contact_positive)/sum(other_weight),
+ biotin_focal=sum(weight*normalized_biotin)/sum(weight),
+ biotin_other=sum(other_weight*normalized_biotin)/sum(other_weight)),
+ by=.(event_node,child,sample_id,time_hours)]
+gold[,contact_relative:=contact_focal-contact_other]
+gold[,observable:=focal_mass>=CONFIG$min_mass&other_mass>=CONFIG$min_mass&
+ focal_n_eff>=CONFIG$min_n_eff&other_n_eff>=CONFIG$min_n_eff]
+gold[observable%in%FALSE,c("contact_focal","contact_other","contact_relative","biotin_focal","biotin_other"):=list(NA_real_,NA_real_,NA_real_,NA_real_,NA_real_)]
+time_profiles<-gold[,.(n_mice=.N,n_observed=sum(observable),
+ relative_mean=mean(contact_relative),relative_min=min(contact_relative),relative_max=max(contact_relative),
+ focal_mean=mean(contact_focal),focal_min=min(contact_focal),focal_max=max(contact_focal)),by=.(event_node,child,time_hours)]
+profiles<-dcast(time_profiles,event_node+child~time_hours,
+ value.var=c("n_mice","n_observed","relative_mean","relative_min","relative_max","focal_mean","focal_min","focal_max"))
+profiles[,truth_available:=n_observed_36==2L&n_observed_50==2L&n_observed_96==2L]
+profiles[,relative_pulse:=truth_available & relative_min_50>pmax(relative_max_36,relative_max_96)]
+profiles[,relative_clear_nonpulse:=truth_available & relative_max_50<pmax(relative_min_36,relative_min_96)]
+profiles[,focal_pulse:=truth_available & focal_min_50>pmax(focal_max_36,focal_max_96)]
+profiles[,focal_clear_nonpulse:=truth_available & focal_max_50<pmax(focal_min_36,focal_min_96)]
+profiles[,relative_sustained_increase:=truth_available&relative_min_96>relative_max_36]
+profiles[,focal_sustained_increase:=truth_available&focal_min_96>focal_max_36]
+candidates<-merge(fc,pmap,by="pair_idx")
+candidates<-candidates[(source==1L&target==2L)|(source==2L&target==1L)]
+fwrite(candidates[,.(pair_idx,interaction_name,annotation,source,target,event_node,child,evaluable,
+ event_ranking_score,no_fork_ranking_score)],file.path(OUT,"ulipstic_all_rna_contact_scope.csv"))
+eligible<-candidates[annotation==CONFIG$candidate_annotation]
+rna<-melt(eligible,id.vars=c("pair_idx","source","target","event_node","child","evaluable","interaction_name"),
+ measure.vars=c("event_ranking_score","no_fork_ranking_score"),variable.name="model",value.name="score",variable.factor=FALSE)
+selection<-rna[,.(selection_score=max(replace(score,!evaluable|!is.finite(score),-Inf))),by=.(model,event_node,pair_idx,source,target,interaction_name)]
+setorder(selection,model,event_node,-selection_score,pair_idx,source,target)
+selection<-selection[,head(.SD,CONFIG$query_budget),by=.(model,event_node)]
+selection<-selection[is.finite(selection_score)]
+selected<-merge(rna,selection[,.(model,event_node,pair_idx,source,target)],by=c("model","event_node","pair_idx","source","target"))
+plan<-merge(CJ(model=unique(rna$model),child_index=children$child_index),children,by="child_index")
+plan<-merge(plan,selected,by=c("model","event_node","child"),all.x=TRUE)
+plan[,rna_available:=evaluable%in%TRUE&is.finite(score)]
+plan[rna_available%in%FALSE,score:=NA_real_]
+observations<-merge(gold,plan,by=c("event_node","child"),all.x=TRUE,allow.cartesian=TRUE)
+observations[,predicted_sign:=sign(score)]
+observations[,observed_sign:=sign(contact_relative)]
+observations[,sign_correct:=fifelse(observable&rna_available,predicted_sign==observed_sign,NA)]
+state_summary<-observations[,.(n_planned_children=.N,n_contact_observable=sum(observable),
+ n_rna_available=sum(rna_available),n_sign_scored=sum(!is.na(sign_correct)),
+ sign_accuracy=mean(sign_correct,na.rm=TRUE)),by=.(model,sample_id,time_hours)]
+cal<-as.data.table(x$calendar_fork_dynamics)
+keys<-c("pair_idx","source","target","event_node","child")
+temporal<-merge(plan,cal[,c(keys,"dynamic_status","dynamic_pattern","dynamic_change_time",
+ "focal_dynamic_status","focal_dynamic_pattern","focal_dynamic_change_time"),with=FALSE],
+ by=keys,all.x=TRUE)
+temporal<-merge(temporal,fc[,c(keys,"dynamic_pattern","dynamic_status"),with=FALSE],
+ by=keys,all.x=TRUE,suffixes=c("","_state"))
+temporal<-merge(temporal,profiles,by=c("event_node","child"),all.x=TRUE)
+temporal[,calendar_relative_pulse:=dynamic_status%in%"observed"&dynamic_pattern%in%"pulse"]
+temporal[,calendar_focal_pulse:=focal_dynamic_status%in%"observed"&focal_dynamic_pattern%in%"pulse"]
+temporal[,state_relative_pulse:=dynamic_status_state%in%"observed"&dynamic_pattern_state%in%"pulse"]
+temporal_summary<-temporal[,.(n_planned=.N,n_contact_three_time=sum(truth_available),
+ n_strict_relative_pulse=sum(relative_pulse),n_strict_relative_nonpulse=sum(relative_clear_nonpulse),
+ n_ambiguous=sum(truth_available&!relative_pulse&!relative_clear_nonpulse),
+ n_calendar_called=sum(dynamic_status%in%"observed"),
+ relative_pulse_tp=sum(relative_pulse&calendar_relative_pulse),
+ relative_pulse_fn=sum(relative_pulse&!calendar_relative_pulse),
+ relative_pulse_fp=sum(relative_clear_nonpulse&calendar_relative_pulse),
+ state_relative_pulse_tp=sum(relative_pulse&state_relative_pulse),
+ state_relative_pulse_fp=sum(relative_clear_nonpulse&state_relative_pulse),
+ n_strict_focal_pulse=sum(focal_pulse),
+ focal_pulse_tp=sum(focal_pulse&calendar_focal_pulse),
+ focal_pulse_fp=sum(focal_clear_nonpulse&calendar_focal_pulse)),by=model]
+saveRDS(list(config=CONFIG,contact_gold=gold,profiles=profiles,selection=selection,
+ state_scores=observations,state_summary=state_summary,temporal=temporal,
+ temporal_summary=temporal_summary),file.path(OUT,"ulipstic_contact_calendar_validation.rds"))
+fwrite(gold,file.path(OUT,"ulipstic_all_mouse_child_contact.csv"))
+fwrite(profiles,file.path(OUT,"ulipstic_independent_time_profiles.csv"))
+fwrite(selection,file.path(OUT,"ulipstic_fixed_rna_contact_queries.csv"))
+fwrite(observations,file.path(OUT,"ulipstic_all_contact_state_predictions.csv"))
+fwrite(state_summary,file.path(OUT,"ulipstic_contact_state_summary.csv"))
+fwrite(temporal,file.path(OUT,"ulipstic_all_contact_time_predictions.csv"))
+fwrite(temporal_summary,file.path(OUT,"ulipstic_contact_time_summary.csv"))
+print(selection)
+print(state_summary)
+print(temporal_summary)
+
+# Matched-query diagnosis holds the RNA-selected pair fixed for both scores.
+matched_query<-merge(candidates,selection[model=="event_ranking_score",
+ .(event_node,pair_idx,source,target)],by=c("event_node","pair_idx","source","target"))
+matched_query<-melt(matched_query,id.vars=c("event_node","child","evaluable"),
+ measure.vars=c("event_ranking_score","no_fork_ranking_score"),
+ variable.name="model",value.name="score",variable.factor=FALSE)
+matched_query<-merge(merge(CJ(model=unique(rna$model),child_index=children$child_index),
+ children,by="child_index"),matched_query,by=c("model","event_node","child"),all.x=TRUE)
+matched_query[,rna_available:=evaluable%in%TRUE&is.finite(score)]
+matched_query<-merge(gold,matched_query,by=c("event_node","child"),all.x=TRUE,allow.cartesian=TRUE)
+matched_query_summary<-matched_query[,.(n_planned=.N,n_contact_observed=sum(observable),
+ n_rna_available=sum(rna_available),n_scored=sum(observable&rna_available),
+ n_correct=sum(observable&rna_available&sign(score)==sign(contact_relative),na.rm=TRUE)),
+ by=.(model,sample_id,time_hours)]
+before<-readRDS(file.path(CONFIG$root,CONFIG$workspace,CONFIG$dataset,
+ "calendar_assignment_reference.rds"))$dynamics
+calendar_coverage<-rbindlist(list(
+ data.table(model="previous_assigned_calendar",n_planned=nrow(before),
+  n_evaluable=sum(before$evaluable),n_calendar_observed=sum(before$dynamic_status=="observed")),
+ data.table(model="observed_subtree_calendar",n_planned=nrow(cal),
+  n_evaluable=sum(cal$evaluable),n_calendar_observed=sum(cal$dynamic_status=="observed"))))
+fwrite(matched_query_summary,file.path(OUT,"ulipstic_matched_query_contact_summary.csv"))
+fwrite(matched_query,file.path(OUT,"ulipstic_matched_query_contact_predictions.csv"))
+fwrite(calendar_coverage,file.path(OUT,"ulipstic_calendar_identifiability_comparison.csv"))
+print(matched_query_summary)
+print(calendar_coverage)
+
+
+
+# Resolve missed contact peaks against the actual per-mouse molecular inputs.
+diagnostic_keys<-c("pair_idx","source","target","child","sample_id")
+diagnostic_scores<-copy(as.data.table(x$calendar_temporal_lr$scores))
+diagnostic_scores[,child:=x$calendar_temporal_lr$profile_nodes[lineage]]
+setnames(diagnostic_scores,c("biological_sample","score"),c("sample_id","calendar_score"))
+diagnostic_curves<-merge(observations[,.(model,event_node,child,pair_idx,source,target,
+ interaction_name,sample_id,time_hours,observable,contact_focal,contact_relative)],
+ diagnostic_scores[,c(diagnostic_keys,"calendar_score","structural_valid",
+ "expression_supported","n_eff_cells","weight_mass_cells"),with=FALSE],
+ by=diagnostic_keys,all.x=TRUE)
+diagnostic_summary<-diagnostic_curves[,.(n_planned=.N,
+ n_contact_observed=sum(observable),n_rna_structural=sum(structural_valid%in%TRUE),
+ n_rna_expression=sum(expression_supported%in%TRUE),
+ n_rna_times=uniqueN(time_hours[structural_valid%in%TRUE])),
+ by=.(model,event_node,child,pair_idx,interaction_name)]
+diagnostic_summary<-merge(diagnostic_summary,profiles[,.(event_node,child,
+ truth_available,focal_pulse,relative_pulse)],by=c("event_node","child"),all.x=TRUE)
+diagnostic_summary[,support_reason:=fcase(is.na(pair_idx),"no_fixed_rna_query",
+ n_rna_structural<n_planned,"incomplete_pair_cell_support",
+ n_rna_expression==0L,"below_expression_support",default="molecular_curve_observed")]
+fwrite(diagnostic_curves,file.path(OUT,CONFIG$diagnostic_curves))
+fwrite(diagnostic_summary,file.path(OUT,CONFIG$diagnostic_summary))
+
+# Nonzero fractions are invariant to the library scaling and log1p transform.
+missed<-merge(temporal[model=="event_ranking_score"&focal_pulse==TRUE],
+ as.data.table(x$pair_gene_map)[,.(pair_idx,ligand_genes,receptor_genes)],by="pair_idx")
+components<-unique(rbindlist(list(
+ missed[,.(event_node,child,interaction_name,role="ligand",type=source,gene=ligand_genes)],
+ missed[,.(event_node,child,interaction_name,role="receptor",type=target,gene=receptor_genes)])))
+genes<-readLines(file.path(x$input_extract_dir,paste0(CONFIG$dataset,"_genes.txt")),encoding="UTF-8")
+entries<-fread(file.path(x$input_extract_dir,paste0(CONFIG$dataset,"_matrix.mtx")),
+ header=FALSE,col.names=c("i","j","value"))
+counts<-sparseMatrix(i=entries$i[-1L],j=entries$j[-1L],x=entries$value[-1L],
+ dims=as.integer(unlist(entries[1L,.(i,j)])))
+dimnames(counts)<-list(genes,x$cells)
+stopifnot(all(components$gene%in%genes))
+expression_values<-as.data.table(t(as.matrix(counts[unique(components$gene),,drop=FALSE])))
+expression_values[,index:=seq_len(.N)]
+expression_values<-melt(expression_values,id.vars="index",variable.name="gene",
+ value.name="count",variable.factor=FALSE)
+native_expression<-merge(weights[weight==1,.(index,event_node,child,sample_id,
+ time_hours,type=x$celltypes[index])],expression_values,by="index",allow.cartesian=TRUE)
+native_expression<-merge(native_expression,components,by=c("event_node","child","type","gene"))
+component_summary<-native_expression[,.(n_cells=.N,n_detected=sum(count>0),
+ detection_fraction=mean(count>0),mean_raw_count=mean(count)),
+ by=.(event_node,child,interaction_name,role,type,gene,sample_id,time_hours)]
+fwrite(component_summary,file.path(OUT,CONFIG$diagnostic_expression))
+print(diagnostic_summary[model=="event_ranking_score"&focal_pulse==TRUE])
+print(component_summary[,.(max_detection_fraction=max(detection_fraction)),
+ by=.(event_node,child,interaction_name,role,gene)])

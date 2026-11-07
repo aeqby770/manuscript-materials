@@ -1,0 +1,16 @@
+Candidates,Rule,Scored,K=10,K=20
+102,Full / peak,84,0.0010,-0.0020
+102,Full / population,84,0.0010,-0.0020
+102,Matched score control / peak,0,Below K,Below K
+102,Matched score control / population,0,Below K,Below K
+102,Matched focal / population,84,-0.0002,-0.0021
+102,TimeTalk,102,0.0029,-0.0047
+102,NicheNet / native Pearson,77,0.0273,0.0262
+75,Full / peak,65,-0.0048,-0.0096
+75,Full / population,65,-0.0048,-0.0096
+75,Matched score control / peak,0,Below K,Below K
+75,Matched score control / population,0,Below K,Below K
+75,ENTRAIN,75,0.0413,0.0335
+75,Matched focal / population,65,-0.0060,-0.0079
+75,TimeTalk,75,0.0028,0.0011
+75,NicheNet / native Pearson,67,0.0226,0.0219

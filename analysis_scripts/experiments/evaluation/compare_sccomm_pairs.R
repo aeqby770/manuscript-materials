@@ -1,0 +1,78 @@
+WORK_ROOT<-normalizePath(Sys.getenv("LLR_WORK_ROOT",getwd()),winslash="/",mustWork=TRUE)
+CONFIG<-list(root=WORK_ROOT,dataset=commandArgs(TRUE)[1L],threads=parallel::detectCores(),
+ base=file.path(WORK_ROOT,"results/evaluation",Sys.getenv("LLR_SCORE_EVAL","final065")),method="scComm_no_TF_activity",
+ native=file.path(WORK_ROOT,"results/evaluation/final065/sccomm/no_TF_activity"))
+Sys.setenv(OMP_NUM_THREADS=CONFIG$threads,OPENBLAS_NUM_THREADS=CONFIG$threads,MKL_NUM_THREADS=CONFIG$threads)
+.libPaths(c(file.path(CONFIG$root,"library"),.libPaths()))
+library(data.table)
+setDTthreads(CONFIG$threads)
+out<-file.path(CONFIG$base,"dynamic_methods",CONFIG$dataset)
+old<-fread(file.path(out,"native_pair_predictions.csv"))[method!=CONFIG$method]
+truth<-fread(file.path(CONFIG$root,"inputs/revision/sim",paste0(CONFIG$dataset,"_truth.csv")))
+native<-fread(file.path(CONFIG$native,CONFIG$dataset,"native_pair_scores.csv"))
+sc<-native[source_label=="SRC" & target_label=="TGT",.(ligand,receptor,score)]
+stopifnot(!anyDuplicated(sc[,.(ligand,receptor)]),all(is.finite(sc$score)))
+resource<-unique(old[,.(ligand,receptor,in_common_resource)])
+sc<-merge(merge(truth[,.(ligand,receptor,true_positive,role)],sc,by=c("ligand","receptor"),all.x=TRUE),
+ resource,by=c("ligand","receptor"),all.x=TRUE)
+sc[,c("dataset","method"):=list(CONFIG$dataset,CONFIG$method)]
+grid<-rbindlist(list(old,sc),use.names=TRUE)
+joint<-grid[,.(jointly_scored=all(is.finite(score))),by=.(ligand,receptor)]
+old_joint<-old[,.(old_joint=all(is.finite(score))),by=.(ligand,receptor)]
+check<-merge(joint,old_joint,by=c("ligand","receptor"))
+stopifnot(identical(check$jointly_scored,check$old_joint))
+ranked<-merge(grid,joint,by=c("ligand","receptor"))
+ranked<-rbindlist(list(copy(ranked[is.finite(score)])[,evaluation_scope:="own_available"],
+ copy(ranked[jointly_scored%in%TRUE])[,evaluation_scope:="common_candidates"]))
+ranked[,c("truth_row","task","prediction_key"):=list(true_positive,"LR_pair_nomination",paste(ligand,receptor,sep="|"))]
+setorder(ranked,task,method,evaluation_scope,-score,prediction_key)
+ranked[,candidate_rank:=seq_len(.N),by=.(task,method,evaluation_scope)]
+n_targets<-uniqueN(truth[true_positive%in%TRUE,.(ligand,receptor,focal_branch,other_branch)])
+metrics<-ranked[,.(n_candidates=.N,n_positive=sum(truth_row),n_null=sum(!truth_row),
+ n_targets=n_targets,precision_at_k=sum(truth_row[candidate_rank<=n_targets])/n_targets),
+ by=.(dataset,task,method,evaluation_scope)]
+eligible<-metrics[n_positive>=2L & n_null>=2L,.(task,method,evaluation_scope)]
+areas<-merge(ranked,eligible,by=c("task","method","evaluation_scope"))[,.(auprc=PRROC::pr.curve(
+ scores.class0=score[truth_row],scores.class1=score[!truth_row],curve=FALSE)$auc.integral),
+ by=.(task,method,evaluation_scope)]
+metrics<-merge(metrics,areas,by=c("task","method","evaluation_scope"),all.x=TRUE)
+metrics[n_targets==0L,precision_at_k:=NA_real_]
+previous_metrics<-fread(file.path(out,"metrics.csv"))
+status<-unique(previous_metrics[task=="LR_pair_nomination" & method!=CONFIG$method,inference_status])
+metrics[,inference_status:=status[1L]]
+metrics[method==CONFIG$method,inference_status:="author_no_TF_activity_native_LR_module"]
+previous_ranked<-fread(file.path(out,"ranked_predictions.csv"))
+rank_fields<-names(previous_ranked)
+fwrite(grid,file.path(out,"native_pair_predictions.csv"))
+fwrite(rbindlist(list(ranked[,..rank_fields],previous_ranked[task!="LR_pair_nomination"])),
+ file.path(out,"ranked_predictions.csv"))
+metrics<-rbindlist(list(metrics,previous_metrics[task!="LR_pair_nomination"]),use.names=TRUE,fill=TRUE)
+fwrite(metrics,file.path(out,"metrics.csv"))
+metric_files<-list.files(file.path(CONFIG$base,"dynamic_methods"),pattern="^metrics[.]csv$",
+ recursive=TRUE,full.names=TRUE)
+all_metrics<-rbindlist(lapply(metric_files,fread),fill=TRUE)
+dataset_scope<-fread(file.path(CONFIG$base,"lrsim_metrics.csv"))[,.(dataset,n_targets_total=n_targets)]
+method_scope<-unique(all_metrics[,.(task,method,evaluation_scope)])
+planned<-merge(dataset_scope[,join_key:=1L],method_scope[,join_key:=1L],
+ by="join_key",allow.cartesian=TRUE)[,join_key:=NULL]
+all_metrics<-merge(planned,all_metrics,by=c("dataset","task","method","evaluation_scope"),all.x=TRUE)
+all_metrics[,completed_native:=dataset%in%basename(dirname(metric_files))]
+all_metrics[is.na(n_targets),n_targets:=n_targets_total]
+all_metrics[completed_native & is.na(n_candidates),c("n_candidates","n_positive","n_null"):=list(0L,0L,0L)]
+all_metrics[,evaluation_status:=fcase(!completed_native,"missing_competitor_output",
+ n_candidates==0L,"no_evaluable_candidates",n_positive==0L,"no_positive_targets_in_scored_candidates",default="scored")]
+all_metrics[is.na(inference_status),inference_status:=fifelse(completed_native,"complete","missing_competitor_output")]
+all_metrics[,c("n_targets_total","completed_native"):=NULL]
+fwrite(all_metrics,file.path(CONFIG$base,"dynamic_methods.csv"))
+protocol_files<-list.files(CONFIG$native,pattern="^protocol[.]csv$",recursive=TRUE,full.names=TRUE)
+protocols<-rbindlist(lapply(protocol_files,fread))[,method:=NULL]
+rank_files<-list.files(file.path(CONFIG$base,"dynamic_methods"),pattern="^ranked_predictions[.]csv$",
+ recursive=TRUE,full.names=TRUE)
+all_ranked<-rbindlist(lapply(rank_files,fread))[method==CONFIG$method & task=="LR_pair_nomination"]
+all_ranked[,c("ligand","receptor"):=tstrsplit(prediction_key,"|",fixed=TRUE)]
+sccomm_complete<-merge(all_ranked,protocols,by="dataset")
+paper_table_dir<-file.path(CONFIG$root,"results/paper_tables/current")
+dir.create(paper_table_dir,recursive=TRUE,showWarnings=FALSE)
+fwrite(sccomm_complete,file.path(paper_table_dir,"supp_sccomm_pair_nomination.csv"))
+print(metrics[evaluation_scope=="common_candidates" & task=="LR_pair_nomination",
+ .(dataset,method,n_candidates,n_positive,n_targets,auprc,precision_at_k)])

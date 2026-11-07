@@ -1,0 +1,11 @@
+Method,Scope,n,ARI,NMI,Matched F1
+LineaLinkR,All cells,12,0.60893,0.68972,0.64071
+CellRank2 (connectivity),All cells,12,0.79287,0.81503,0.77948
+FateID (targets),All cells,12,0.44899,0.60268,0.35560
+slingshot,All cells,12,0.14671,0.21438,0.23093
+scFates (segments),All cells,12,0.36841,0.59848,0.09145
+LineaLinkR,Terminal cells,4,0.94901,0.92295,0.98609
+CellRank2 (connectivity),Terminal cells,4,0.75000,0.75000,0.84272
+FateID (targets),Terminal cells,4,1.00000,1.00000,1.00000
+slingshot,Terminal cells,4,0.10513,0.12230,0.56414
+scFates (segments),Terminal cells,4,0.53981,0.62445,0.37154

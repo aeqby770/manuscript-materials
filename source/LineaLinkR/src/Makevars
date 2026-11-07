@@ -1,0 +1,54 @@
+# LineaLinkR · src/Makevars (Linux / macOS)
+#
+# Builds the LineaLinkR Rust staticlib via cargo with the `extendr` feature
+# enabled, then links it into the R shared object together with
+# entrypoint.o (which forwards R_init_LineaLinkR to the extendr registrator).
+#
+# Companion file: src/Makevars.win for Windows (GNU target).
+#
+# LineaLinkR is NOT a CRAN package.  We keep this Makevars static (no
+# tools/config.R template substitution) because CRAN vendor/offline logic
+# would only add complexity without benefit.  See BUILD_NOTES.md for the
+# full build matrix and toolchain alternatives.
+
+TARGET_DIR = ../target
+LIBDIR     = $(TARGET_DIR)/release
+STATLIB    = $(LIBDIR)/liblinealinkr.a
+
+PKG_LIBS = $(STATLIB) -lpthread -ldl -lm
+
+OBJECTS = entrypoint.o absorption_lu64.o state_clock.o
+
+all: $(SHLIB) rust_clean
+
+$(SHLIB): $(STATLIB)
+
+CARGO = cargo
+
+# See src/Makevars.win for why CARGO_HOME is intentionally NOT redirected
+# to a project-local directory: it triggers cargo unpack-mtime failures on
+# Windows.  Using the user's global ~/.cargo is fine on Linux/macOS too and
+# lets `cargo build` reuse any pre-existing cache.
+
+$(STATLIB):
+	@mkdir -p $(LIBDIR)
+	@CARGO_EXE="$(CARGO)"; \
+	if ! command -v "$$CARGO_EXE" >/dev/null 2>&1; then \
+		if [ -x "$$HOME/.cargo/bin/cargo" ]; then \
+			CARGO_EXE="$$HOME/.cargo/bin/cargo"; \
+		else \
+			echo "ERROR: cargo not found. Install rustc + cargo (>=1.65) before R CMD INSTALL."; \
+			exit 1; \
+		fi; \
+	fi; \
+	"$$CARGO_EXE" rustc --lib --crate-type=staticlib \
+		--release --features extendr \
+		--manifest-path=../Cargo.toml --target-dir=$(TARGET_DIR)
+
+rust_clean: $(SHLIB)
+	@true
+
+clean:
+	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) $(TARGET_DIR)
+
+.PHONY: all rust_clean clean

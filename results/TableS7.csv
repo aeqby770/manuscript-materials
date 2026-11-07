@@ -1,0 +1,6 @@
+Model,Pair AUPRC,Precision@K,Budget hits,Null positive
+LineaLinkR,0.64166,0.60000,29/42,13/33
+Descendant parents,0.60877,0.58333,27/42,14/33
+Positive persistence,0.64418,0.58333,27/42,5/33
+Persistence only,0.64053,0.60000,29/42,13/33
+Matched score control,0.81103,0.70000,29/42,2/33

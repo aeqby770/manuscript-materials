@@ -1,7 +1,0 @@
-sample,n_cells,median_counts,median_genes,median_pct_mt,stage
-t96,3496,17216.5,4291.0,2.0775223,before_qc
-t120_G,3168,22321.0,5237.5,1.738344,before_qc
-t120_R,2361,12175.0,3784.0,1.7595308,before_qc
-t96,2893,18112.0,4431.0,2.0246606,after_qc
-t120_G,2978,22874.0,5297.5,1.712435,after_qc
-t120_R,2071,12788.0,3879.0,1.7103837,after_qc

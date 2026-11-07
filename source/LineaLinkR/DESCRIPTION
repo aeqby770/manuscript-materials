@@ -1,0 +1,33 @@
+Package: LineaLinkR
+Type: Package
+Title: Lineage and Cell-Cell Communication Integration
+Version: 0.6.5
+Depends: R (>= 4.2.0)
+Imports: data.table, Matrix, RANN, stats, tools, igraph, RSpectra,
+        matrixStats
+LinkingTo: RcppEigen
+Author: Hongjie Jiang [aut], Xinyu Zhang [aut], Hong Xin Wang [aut],
+    Yanxiao Han [aut], Yanshuo Han [aut, cre]
+Authors@R: c(
+    person("Hongjie", "Jiang", role = "aut"),
+    person("Xinyu", "Zhang", role = "aut"),
+    person("Hong Xin", "Wang", role = "aut"),
+    person("Yanxiao", "Han", email = "yanxiao.han@aliyun.com", role = "aut"),
+    person("Yanshuo", "Han", email = "yanshuohan@dlut.edu.cn", role = c("aut", "cre")))
+Description: Extracted core methods for pseudotime trajectory and temporal
+    ligand-receptor communication integration. The Rust core (linked via
+    extendr) handles cluster-level LR scoring, fate probabilities,
+    pseudotime DE, and lineage weighting.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+SystemRequirements: C++17; Cargo and rustc >= 1.80 for source
+        installation. On Windows, Rtools matching R and the
+        x86_64-pc-windows-gnu Rust toolchain are required. Binary
+        installation does not require compilers.
+Suggests: testthat (>= 3.0.0)
+NeedsCompilation: yes
+Packaged: 2026-11-06 05:08:51 UTC; 1
+Maintainer: Yanshuo Han <yanshuohan@dlut.edu.cn>

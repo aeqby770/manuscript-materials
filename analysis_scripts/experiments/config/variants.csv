@@ -1,0 +1,2 @@
+variant,workspace,metadata_workspace,event_scope,boundary,anchor_rule,scoring_mode,activity_mode,min_n_eff,role,runnable,time_method,root_max_iter
+L1D0contTargetedInterval,feasible_clock,main,all,tree_segment_interval,min,interval,continuous,5,source_leaf_and_ordering_failure_candidate,True,tangent_multibridge_terminal_direct,3000
