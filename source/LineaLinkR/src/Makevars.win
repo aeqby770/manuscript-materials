@@ -1,0 +1,52 @@
+# Build with the GNU Rust target used by Rtools.
+# LINEALINKR_NEED_LIBGCC_EH_MOCK enables legacy TDM-GCC unwinding support.
+TARGET     = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))-pc-windows-gnu
+TARGET_DIR = ../target
+LIBDIR     = $(TARGET_DIR)/$(TARGET)/release
+STATLIB    = $(LIBDIR)/liblinealinkr.a
+
+PKG_LIBS = $(STATLIB) \
+	-lws2_32 -ladvapi32 -luserenv -lbcrypt -lntdll \
+	-lpsapi -lole32 -loleaut32
+
+OBJECTS = entrypoint.o absorption_lu64.o state_clock.o
+
+all: $(SHLIB) rust_clean
+
+$(SHLIB): $(STATLIB)
+
+CARGO       ?= cargo
+LIBGCC_MOCK  = $(TARGET_DIR)/libgcc_mock
+
+.PHONY: $(STATLIB)
+
+$(STATLIB):
+	@CARGO_EXE="$(CARGO)"; \
+	if ! command -v "$$CARGO_EXE" >/dev/null 2>&1; then \
+		if [ -x "$$USERPROFILE/.cargo/bin/cargo.exe" ]; then \
+			CARGO_EXE="$$USERPROFILE/.cargo/bin/cargo.exe"; \
+		elif [ -x "$$HOME/.cargo/bin/cargo.exe" ]; then \
+			CARGO_EXE="$$HOME/.cargo/bin/cargo.exe"; \
+		else \
+			echo "ERROR: cargo not found. Install rustc + cargo (>=1.80) before R CMD INSTALL."; \
+			exit 1; \
+		fi; \
+	fi; \
+	if [ -n "$$LINEALINKR_NEED_LIBGCC_EH_MOCK" ]; then \
+		mkdir -p "$(LIBGCC_MOCK)" && : > "$(LIBGCC_MOCK)/libgcc_eh.a" && \
+		echo "[LineaLinkR] Using libgcc_eh.a mock at $(LIBGCC_MOCK) (TDM-GCC mode)"; \
+		LIBRARY_PATH="$$LIBRARY_PATH;$(CURDIR)/$(LIBGCC_MOCK)" \
+			"$$CARGO_EXE" rustc --lib --crate-type=staticlib \
+			--target=$(TARGET) --release --features extendr \
+			--manifest-path=../Cargo.toml --target-dir=$(TARGET_DIR); \
+	else \
+		"$$CARGO_EXE" rustc --lib --crate-type=staticlib \
+			--target=$(TARGET) --release --features extendr \
+			--manifest-path=../Cargo.toml --target-dir=$(TARGET_DIR); \
+	fi
+
+rust_clean: $(SHLIB)
+	@true
+
+clean:
+	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) $(TARGET_DIR)

@@ -1,0 +1,33 @@
+Package: LineaLinkR
+Type: Package
+Title: Lineage and Cell-Cell Communication Integration
+Version: 0.6.8
+Depends: R (>= 4.2.0)
+Imports: data.table, Matrix, RANN, stats, tools, igraph, RSpectra,
+        matrixStats
+LinkingTo: RcppEigen
+Author: Hongjie Jiang [aut], Xinyu Zhang [aut], Hong Xin Wang [aut],
+    Yanxiao Han [aut], Yanshuo Han [aut, cre]
+Authors@R: c(
+    person("Hongjie", "Jiang", role = "aut"),
+    person("Xinyu", "Zhang", role = "aut"),
+    person("Hong Xin", "Wang", role = "aut"),
+    person("Yanxiao", "Han", email = "yanxiao.han@aliyun.com", role = "aut"),
+    person("Yanshuo", "Han", email = "yanshuohan@dlut.edu.cn", role = c("aut", "cre")))
+Description: Infers RNA-state trajectories and lineage memberships from
+    cell-neighbour graphs and estimates sample-matched ligand-receptor
+    activity contrasts across related states. Includes temporal profiles,
+    sender-removal queries and conditional lineage-composition estimates.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+SystemRequirements: C++17; Cargo and rustc >= 1.80 for source
+        installation. On Windows, Rtools matching R and the
+        x86_64-pc-windows-gnu Rust toolchain are required.
+Suggests: testthat (>= 3.0.0)
+NeedsCompilation: yes
+Maintainer: Yanshuo Han <yanshuohan@dlut.edu.cn>
+URL: https://github.com/aeqby770/manuscript-materials
+BugReports: https://github.com/aeqby770/manuscript-materials/issues

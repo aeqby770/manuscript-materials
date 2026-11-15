@@ -1,0 +1,37 @@
+# Build the Rust static library and link it into the R shared library.
+TARGET_DIR = ../target
+LIBDIR     = $(TARGET_DIR)/release
+STATLIB    = $(LIBDIR)/liblinealinkr.a
+
+PKG_LIBS = $(STATLIB) -lpthread -ldl -lm
+
+OBJECTS = entrypoint.o absorption_lu64.o state_clock.o
+
+all: $(SHLIB) rust_clean
+
+$(SHLIB): $(STATLIB)
+
+CARGO = cargo
+
+$(STATLIB):
+	@mkdir -p $(LIBDIR)
+	@CARGO_EXE="$(CARGO)"; \
+	if ! command -v "$$CARGO_EXE" >/dev/null 2>&1; then \
+		if [ -x "$$HOME/.cargo/bin/cargo" ]; then \
+			CARGO_EXE="$$HOME/.cargo/bin/cargo"; \
+		else \
+			echo "ERROR: cargo not found. Install rustc + cargo (>=1.80) before R CMD INSTALL."; \
+			exit 1; \
+		fi; \
+	fi; \
+	"$$CARGO_EXE" rustc --lib --crate-type=staticlib \
+		--release --features extendr \
+		--manifest-path=../Cargo.toml --target-dir=$(TARGET_DIR)
+
+rust_clean: $(SHLIB)
+	@true
+
+clean:
+	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) $(TARGET_DIR)
+
+.PHONY: all rust_clean clean

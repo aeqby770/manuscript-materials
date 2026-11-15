@@ -1,0 +1,15 @@
+^target$
+^src/[^/]+\.(dll|o|obj|so|dylib|rds)$
+^.*\.Rcheck$
+^analysis$
+^research$
+^docs$
+^dist$
+^cache$
+^results$
+^library$
+^inputs$
+^formal$
+^logs$
+^tools$
+^scripts$
