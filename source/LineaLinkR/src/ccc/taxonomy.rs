@@ -88,8 +88,7 @@ impl LrBinIntermediate {
     }
 }
 
-/// Compute `H_l(b)` using option A, the supported marginalisation formula.
-/// Option B is not used.
+/// Compute `H_l(b)` by marginalising over cell types.
 ///
 /// ```text
 /// H_l(b) = sum_{ct} hwsums[ct,l,b] / sum_{ct} wsums[ct,l,b]

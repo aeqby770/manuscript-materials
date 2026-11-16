@@ -860,11 +860,8 @@ pub(crate) fn compute_lr_scores_bins_internal(
     f32,
     LrBinGrid,
 ) {
-    // Return signature includes LrBinIntermediate for downstream entropy.
-    // from `Vec<LrBinResult>` to `(Vec<LrBinResult>, LrBinIntermediate)` so
-    // that the `hwsums` / `wsums` accumulators live past the rayon region
-    // and can feed `compute_lineage_entropy_raw` downstream.  `LrBinResult`
-    // itself stays at 8 fields, one byte unchanged.
+    // LrBinIntermediate retains the hwsums / wsums accumulators after the
+    // parallel region for downstream compute_lineage_entropy_raw.
     use crate::ccc::taxonomy::LrBinIntermediate;
     let n_cells = expr.ncols;
 
@@ -1148,10 +1145,8 @@ pub(crate) fn compute_lr_scores_bins_internal(
         })
         .collect();
 
-    // per-lineage entropy: `hwsums` / `wsums` borrow ends here (rayon closure above
-    // captured `&hwsums` / `&wsums` for line 614-617's read-only lookup).
-    // Move them both into the intermediate now that the parallel region is
-    // done — zero-copy, layout unchanged (`ct * slb + lin * sb + bin`).
+    // The intermediate retains hwsums and wsums after the parallel region.
+    // Layout: ct * slb + lin * sb + bin.
     let intermediate = LrBinIntermediate {
         hwsums: hwsums.clone(),
         wsums: wsums.clone(),

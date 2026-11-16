@@ -21,12 +21,11 @@
 //!   real LR gene, pick the `caliper_k` closest candidate genes (by
 //!   Euclidean distance in the 4-D feature space) in its own stratum.
 //!
-//! ## Design decisions
+//! ## Null construction
 //!
-//! - Gene-pair swap (a) is the **primary null** — structure-guaranteed
-//!   invalid, testing LR identity specificity head-on.
-//! - Stratified sampling + within-stratum caliper (a2), NOT propensity
-//!   matching (a3) — semantic overlap would damage interpretability.
+//! - Gene-pair swap is the primary null for testing LR identity specificity.
+//! - Stratified sampling uses within-stratum caliper matching rather than
+//!   propensity matching.
 //! - `|D*| = n_fake_mult × |D|` target.
 //! - Row-level p_fake uses the actually observed matched fake rows.
 //! - Publication inference should aggregate bins to fake trajectories and use

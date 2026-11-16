@@ -16,11 +16,6 @@
 //!   3. Gaussian soft-assignment to MST branches (no shrink.common)
 //!   4. Dijkstra pseudotime on cell-level kNN graph (fuzzy weights option)
 //!
-//! Practical impact: for well-separated, linear trajectories the difference is
-//! minor.  For curved or branching trajectories in high dimensions, principal
-//! curves fit the data manifold more accurately.  Arc-length pseudotime from
-//! Slingshot is smoother than Dijkstra pseudotime near branch points.
-//!
 //! ## Comparison with Palantir (Setty et al., 2019)
 //!
 //! Palantir uses:
@@ -186,9 +181,6 @@ pub fn lineage_entropy(lineage_weights: &[f32], n_cells: usize, n_lineages: usiz
 }
 
 /// Lightweight DTW-based trajectory profile similarity in [0,1].
-///
-/// This absorbs TraSig's key advantage (cross-trajectory temporal alignment)
-/// while remaining computationally cheap for per-pair profile comparison.
 ///
 /// Similarity is computed as:
 ///   sim = 1 / (1 + dist / max(n, m))

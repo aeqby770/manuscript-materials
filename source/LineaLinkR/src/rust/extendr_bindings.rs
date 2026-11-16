@@ -1678,8 +1678,8 @@ mod extendr_impl {
 
     // ── 6f. ComputeRoleScores ──────────────────────────────────────────────
 
-    /// Compute the five role scores (instructive / reinforcing / feedback /
-    /// lateral / bystander) per row. Batched over all
+    /// Compute the six role scores (instructive / transition_like / reinforcing /
+    /// feedback / lateral / bystander) per row. Batched over all
     /// `LrBinResult` rows; each row's own `bin` and `lineage` address
     /// into the per-lineage `BifurcationResult`.
     ///
@@ -1691,7 +1691,7 @@ mod extendr_impl {
     ///   own lineage. Caller must supply it.
     /// - `spec_max_other`: `max_{l' != l} spec(p, s, t, b, l')` — used
     ///   for the `lateral` term only.  Set to 0 when `n_lineages == 1`.
-    /// - `delta_tau`: Δτ = source_pt - target_pt. NaN
+    /// - `delta_tau`: Δτ = target_pt - source_pt. NaN
     ///   propagates through sigmoid and flags the row.
     ///
     /// **Per-lineage inputs** (all length `n_lineages`, matching
@@ -1707,7 +1707,7 @@ mod extendr_impl {
     ///   Kish effective sample size (typically read from the `n_eff_cells`
     ///   column of `ComputeTemporalLRWithIntermediate`'s `scores` df).
     /// - `min_n_eff_cells`: scalar threshold; rows with strictly less
-    ///   are forced to `(0,0,0,0,1)` regardless of formula inputs.
+    ///   are forced to `(0,0,0,0,0,1)` regardless of formula inputs.
     ///   Pass `0.0` to disable the gate.
     ///
     /// @param tau_0 numeric, direction-sigmoid scale (typically
